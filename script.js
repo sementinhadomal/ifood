@@ -735,7 +735,7 @@ function ensureCouponModalElements() {
             <div id="coupon-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="coupon-title">
                 <div class="modal-card">
                     <div class="coupon-hero">
-                        <img src="/assets/bagfoto.png" alt="Bag iFood com desconto">
+                        <img src="/assets/bagfoto.webp" alt="Bag iFood com desconto">
                     </div>
                     <span id="coupon-badge" class="modal-badge">Cupom exclusivo</span>
                     <h3 id="coupon-title">Desconto liberado no frete</h3>
