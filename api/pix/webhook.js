@@ -284,16 +284,16 @@ function extractGatewayEvent(gateway, body = {}) {
                 cep: ''
             },
             fallbackUtm: {
-                utm_source: String(metadata?.utm_source || '').trim(),
-                utm_medium: String(metadata?.utm_medium || '').trim(),
-                utm_campaign: String(metadata?.utm_campaign || '').trim(),
-                utm_term: String(metadata?.utm_term || '').trim(),
-                utm_content: String(metadata?.utm_content || '').trim(),
-                src: String(metadata?.src || '').trim(),
-                sck: String(metadata?.sck || '').trim(),
-                fbclid: String(metadata?.fbclid || '').trim(),
-                gclid: String(metadata?.gclid || '').trim(),
-                ttclid: String(metadata?.ttclid || '').trim()
+                utm_source: String(body?.utm_source || metadata?.utm_source || '').trim(),
+                utm_medium: String(body?.utm_medium || metadata?.utm_medium || '').trim(),
+                utm_campaign: String(body?.utm_campaign || metadata?.utm_campaign || '').trim(),
+                utm_term: String(body?.utm_term || metadata?.utm_term || '').trim(),
+                utm_content: String(body?.utm_content || metadata?.utm_content || '').trim(),
+                src: String(body?.src || metadata?.src || '').trim(),
+                sck: String(body?.sck || metadata?.sck || '').trim(),
+                fbclid: String(body?.fbclid || metadata?.fbclid || '').trim(),
+                gclid: String(body?.gclid || metadata?.gclid || '').trim(),
+                ttclid: String(body?.ttclid || metadata?.ttclid || '').trim()
             }
         };
     }
@@ -920,6 +920,46 @@ module.exports = async (req, res) => {
             customerEmail: leadData?.email || evt.fallbackPersonal?.email || '',
             cep: leadData?.cep || '',
             shippingName: leadData?.shipping_name || '',
+            utm: {
+                utm_source: leadData?.utm_source || leadUtm?.utm_source || evt.fallbackUtm?.utm_source || evt.fallbackUtm?.src || '',
+                utm_medium: leadData?.utm_medium || leadUtm?.utm_medium || evt.fallbackUtm?.utm_medium || '',
+                utm_campaign: (
+                    leadData?.utm_campaign ||
+                    leadUtm?.utm_campaign ||
+                    evt.fallbackUtm?.utm_campaign ||
+                    evt.fallbackUtm?.campaign ||
+                    evt.fallbackUtm?.sck ||
+                    ''
+                ),
+                utm_term: leadData?.utm_term || leadUtm?.utm_term || evt.fallbackUtm?.utm_term || evt.fallbackUtm?.term || '',
+                utm_content: (
+                    leadData?.utm_content ||
+                    leadUtm?.utm_content ||
+                    evt.fallbackUtm?.utm_content ||
+                    evt.fallbackUtm?.utm_adset ||
+                    evt.fallbackUtm?.adset ||
+                    evt.fallbackUtm?.content ||
+                    ''
+                )
+            },
+            source: leadData?.utm_source || leadUtm?.utm_source || evt.fallbackUtm?.utm_source || evt.fallbackUtm?.src || '',
+            campaign: (
+                leadData?.utm_campaign ||
+                leadUtm?.utm_campaign ||
+                evt.fallbackUtm?.utm_campaign ||
+                evt.fallbackUtm?.campaign ||
+                evt.fallbackUtm?.sck ||
+                ''
+            ),
+            adset: (
+                leadData?.utm_content ||
+                leadUtm?.utm_content ||
+                evt.fallbackUtm?.utm_content ||
+                evt.fallbackUtm?.utm_adset ||
+                evt.fallbackUtm?.adset ||
+                evt.fallbackUtm?.content ||
+                ''
+            ),
             isUpsell: upsellEvent
         };
         const pushKind = upsellEvent ? 'upsell_pix_confirmed' : 'pix_confirmed';

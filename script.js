@@ -1,113 +1,113 @@
-const questions = {
+Ôªøconst questions = {
     start: {
         id: 'start',
-        text: 'VocÍ j· realiza entregas pelo iFood?',
+        text: 'Voc√™ j√° realiza entregas pelo iFood?',
         options: [
-            { text: 'Sim, j· sou parceiro', icon: '??', next: 'tempo_atividade' },
-            { text: 'Ainda n„o, quero comeÁar', icon: '??', next: 'possu_veiculo' }
+            { text: 'Sim, j√° sou parceiro', icon: 'üõµ', next: 'tempo_atividade' },
+            { text: 'Ainda n√£o, quero come√ßar', icon: 'üöÄ', next: 'possu_veiculo' }
         ]
     },
     tempo_atividade: {
         id: 'tempo_atividade',
-        text: 'H· quanto tempo vocÍ est· nas entregas?',
+        text: 'H√° quanto tempo voc√™ est√° nas entregas?',
         options: [
-            { text: 'Estou comeÁando agora', icon: '??', next: 'disponibilidade' },
-            { text: 'Menos de 1 ano', icon: '?', next: 'disponibilidade' },
-            { text: 'Mais de 1 ano', icon: '??', next: 'disponibilidade' }
+            { text: 'Estou come√ßando agora', icon: 'üå±', next: 'disponibilidade' },
+            { text: 'Menos de 1 ano', icon: '‚≠ê', next: 'disponibilidade' },
+            { text: 'Mais de 1 ano', icon: 'üèÜ', next: 'disponibilidade' }
         ]
     },
     possu_veiculo: {
         id: 'possu_veiculo',
-        text: 'VocÍ j· tem veÌculo para entregas?',
+        text: 'Voc√™ j√° tem ve√≠culo para entregas?',
         options: [
-            { text: 'Sim, j· tenho', icon: '?', next: 'tipo_veiculo' },
-            { text: 'Estou providenciando', icon: '???', next: 'tipo_veiculo' }
+            { text: 'Sim, j√° tenho', icon: '‚úÖ', next: 'tipo_veiculo' },
+            { text: 'Estou providenciando', icon: 'üõ†Ô∏è', next: 'tipo_veiculo' }
         ]
     },
     tipo_veiculo: {
         id: 'tipo_veiculo',
-        text: 'Qual ser· seu principal meio de entrega?',
+        text: 'Qual ser√° seu principal meio de entrega?',
         options: [
-            { text: 'Moto', icon: '???', next: 'cnh_status' },
-            { text: 'Bicicleta', icon: '??', next: 'disponibilidade' }
+            { text: 'Moto', icon: 'üèçÔ∏è', next: 'cnh_status' },
+            { text: 'Bicicleta', icon: 'üö≤', next: 'disponibilidade' }
         ]
     },
     cnh_status: {
         id: 'cnh_status',
-        text: 'Qual È a situaÁ„o da sua CNH?',
+        text: 'Qual √© a situa√ß√£o da sua CNH?',
         options: [
-            { text: 'EAR (Atividade remunerada)', icon: '?', next: 'disponibilidade' },
-            { text: 'CNH comum (sem EAR)', icon: '??', next: 'disponibilidade' },
-            { text: 'ProvisÛria', icon: '??', next: 'disponibilidade' }
+            { text: 'EAR (Atividade remunerada)', icon: '‚úÖ', next: 'disponibilidade' },
+            { text: 'CNH comum (sem EAR)', icon: '‚ö†Ô∏è', next: 'disponibilidade' },
+            { text: 'Provis√≥ria', icon: 'üî∞', next: 'disponibilidade' }
         ]
     },
     disponibilidade: {
         id: 'disponibilidade',
-        text: 'Quantas horas por dia vocÍ pretende ficar online?',
+        text: 'Quantas horas por dia voc√™ pretende ficar online?',
         options: [
-            { text: 'AtÈ 4 horas', icon: '??', next: 'objetivo_renda' },
-            { text: '4 a 8 horas', icon: '??', next: 'objetivo_renda' },
-            { text: 'Mais de 8 horas', icon: '??', next: 'objetivo_renda' }
+            { text: 'At√© 4 horas', icon: '‚è±Ô∏è', next: 'objetivo_renda' },
+            { text: '4 a 8 horas', icon: 'üíº', next: 'objetivo_renda' },
+            { text: 'Mais de 8 horas', icon: 'üöÄ', next: 'objetivo_renda' }
         ]
     },
     objetivo_renda: {
         id: 'objetivo_renda',
-        text: 'Qual È seu objetivo com as entregas?',
+        text: 'Qual √© seu objetivo com as entregas?',
         options: [
-            { text: 'Renda extra', icon: '??', next: 'regiao_preferencia' },
-            { text: 'Renda principal', icon: '??', next: 'regiao_preferencia' },
-            { text: 'Quero crescer r·pido', icon: '??', next: 'regiao_preferencia' }
+            { text: 'Renda extra', icon: 'üí°', next: 'regiao_preferencia' },
+            { text: 'Renda principal', icon: 'üìà', next: 'regiao_preferencia' },
+            { text: 'Quero crescer r√°pido', icon: 'üî•', next: 'regiao_preferencia' }
         ]
     },
     regiao_preferencia: {
         id: 'regiao_preferencia',
-        text: 'Onde vocÍ prefere atuar?',
+        text: 'Onde voc√™ prefere atuar?',
         options: [
-            { text: 'Centro e arredores', icon: '???', next: 'equipamento' },
-            { text: 'Bairros residenciais', icon: '??', next: 'equipamento' },
-            { text: 'PrÛximo a shoppings', icon: '???', next: 'equipamento' }
+            { text: 'Centro e arredores', icon: 'üèôÔ∏è', next: 'equipamento' },
+            { text: 'Bairros residenciais', icon: 'üè°', next: 'equipamento' },
+            { text: 'Pr√≥ximo a shoppings', icon: 'üõçÔ∏è', next: 'equipamento' }
         ]
     },
     equipamento: {
         id: 'equipamento',
-        text: 'VocÍ j· tem bag tÈrmica em boas condiÁıes?',
+        text: 'Voc√™ j√° tem bag t√©rmica em boas condi√ß√µes?',
         options: [
-            { text: 'Sim, mas preciso trocar', icon: '??', next: 'horario_pico' },
-            { text: 'N„o tenho, preciso da primeira', icon: '??', next: 'horario_pico' },
-            { text: 'Tenho e quero uma reserva', icon: '?', next: 'horario_pico' }
+            { text: 'Sim, mas preciso trocar', icon: '‚ôªÔ∏è', next: 'horario_pico' },
+            { text: 'N√£o tenho, preciso da primeira', icon: 'üéí', next: 'horario_pico' },
+            { text: 'Tenho e quero uma reserva', icon: '‚úÖ', next: 'horario_pico' }
         ]
     },
     horario_pico: {
         id: 'horario_pico',
-        text: 'VocÍ consegue rodar em hor·rios de pico (almoÁo/jantar)?',
+        text: 'Voc√™ consegue rodar em hor√°rios de pico (almo√ßo/jantar)?',
         options: [
-            { text: 'Sim, com certeza', icon: '??', next: 'personal_step' },
-            { text: 'Consigo ‡s vezes', icon: '??', next: 'personal_step' },
-            { text: 'Prefiro hor·rios alternativos', icon: '??', next: 'personal_step' }
+            { text: 'Sim, com certeza', icon: 'üî•', next: 'personal_step' },
+            { text: 'Consigo √†s vezes', icon: 'üìÖ', next: 'personal_step' },
+            { text: 'Prefiro hor√°rios alternativos', icon: 'üåô', next: 'personal_step' }
         ]
     }
 };
 
 const STORAGE_KEYS = {
-    personal: 'entregadoresifood.personal',
-    address: 'entregadoresifood.address',
-    quizComplete: 'entregadoresifood.quizComplete',
-    stage: 'entregadoresifood.stage',
-    stock: 'entregadoresifood.stock',
-    returnTo: 'entregadoresifood.returnTo',
-    shipping: 'entregadoresifood.shipping',
-    addressExtra: 'entregadoresifood.addressExtra',
-    pix: 'entregadoresifood.pix',
-    bump: 'entregadoresifood.bump',
-    leadSession: 'entregadoresifood.leadSession',
-    utm: 'entregadoresifood.utm',
-    pixelConfig: 'entregadoresifood.pixelConfig',
-    coupon: 'entregadoresifood.coupon',
-    directCheckout: 'entregadoresifood.directCheckout',
-    vslCompleted: 'entregadoresifood.vslCompleted',
-    orderbumpBackAutoPix: 'entregadoresifood.orderbumpBackAutoPix',
-    pixCreateLock: 'entregadoresifood.pixCreateLock',
-    pixelEventDedupe: 'entregadoresifood.pixelEventDedupe'
+    personal: 'ifoodbag.personal',
+    address: 'ifoodbag.address',
+    quizComplete: 'ifoodbag.quizComplete',
+    stage: 'ifoodbag.stage',
+    stock: 'ifoodbag.stock',
+    returnTo: 'ifoodbag.returnTo',
+    shipping: 'ifoodbag.shipping',
+    addressExtra: 'ifoodbag.addressExtra',
+    pix: 'ifoodbag.pix',
+    bump: 'ifoodbag.bump',
+    leadSession: 'ifoodbag.leadSession',
+    utm: 'ifoodbag.utm',
+    pixelConfig: 'ifoodbag.pixelConfig',
+    coupon: 'ifoodbag.coupon',
+    directCheckout: 'ifoodbag.directCheckout',
+    vslCompleted: 'ifoodbag.vslCompleted',
+    orderbumpBackAutoPix: 'ifoodbag.orderbumpBackAutoPix',
+    pixCreateLock: 'ifoodbag.pixCreateLock',
+    pixelEventDedupe: 'ifoodbag.pixelEventDedupe'
 };
 
 const state = {
@@ -266,7 +266,7 @@ function setupGlobalBackRedirect(page) {
     const couponMessage = modalEls.couponMessage;
     const couponBadge = modalEls.couponBadge;
     const couponSubtitle = modalEls.couponSubtitle;
-    const backOfferLevelKey = `entregadoresifood.backOfferLevel.${page}`;
+    const backOfferLevelKey = `ifoodbag.backOfferLevel.${page}`;
     const getStoredOfferLevel = () => {
         try {
             return Math.max(0, Number(sessionStorage.getItem(backOfferLevelKey) || 0));
@@ -593,7 +593,7 @@ function setupGlobalBackRedirect(page) {
                             pix
                                 ? applyCouponToShipping({
                                     id: String(pix?.shippingId || 'padrao'),
-                                    name: String(pix?.shippingName || 'Envio Padr„o iFood'),
+                                    name: String(pix?.shippingName || 'Envio Padr√£o iFood'),
                                     eta: '',
                                     price: fallbackShippingBase,
                                     basePrice: fallbackShippingBase,
@@ -735,12 +735,12 @@ function ensureCouponModalElements() {
             <div id="coupon-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="coupon-title">
                 <div class="modal-card">
                     <div class="coupon-hero">
-                        <img src="/assets/bagfoto.png" alt="Bag iFood com desconto">
+                        <img src="/assets/bagfoto.webp" alt="Bag iFood com desconto">
                     </div>
                     <span id="coupon-badge" class="modal-badge">Cupom exclusivo</span>
                     <h3 id="coupon-title">Desconto liberado no frete</h3>
-                    <p id="coupon-message">VocÍ ganhou R$ 5,00 de desconto no frete da Bag.</p>
-                    <span id="coupon-subtitle" class="coupon-subtitle">Oferta v·lida agora nesta sess„o</span>
+                    <p id="coupon-message">Voc√™ ganhou R$ 5,00 de desconto no frete da Bag.</p>
+                    <span id="coupon-subtitle" class="coupon-subtitle">Oferta v√°lida agora nesta sess√£o</span>
                     <button id="btn-coupon-apply" class="btn-primary" type="button">Usar cupom e pagar mais barato</button>
                 </div>
             </div>
@@ -989,22 +989,22 @@ function initPersonal() {
         }
 
         if (!isValidDate(birthValue)) {
-            showInlineError(errorBox, 'Digite uma data v·lida (DD/MM/AAAA).');
+            showInlineError(errorBox, 'Digite uma data v√°lida (DD/MM/AAAA).');
             return;
         }
 
         if (!validateCPF(cpfValue)) {
-            showInlineError(errorBox, 'CPF inv·lido. Verifique os n˙meros digitados.');
+            showInlineError(errorBox, 'CPF inv√°lido. Verifique os n√∫meros digitados.');
             return;
         }
 
         if (!isValidEmail(emailValue)) {
-            showInlineError(errorBox, 'Digite um e-mail v·lido.');
+            showInlineError(errorBox, 'Digite um e-mail v√°lido.');
             return;
         }
 
         if (!isValidPhone(phoneValue)) {
-            showInlineError(errorBox, 'Digite um telefone v·lido com DDD.');
+            showInlineError(errorBox, 'Digite um telefone v√°lido com DDD.');
             return;
         }
 
@@ -1168,7 +1168,7 @@ function initCep() {
 
         const rawCep = cepInput.value.replace(/\D/g, '');
         if (rawCep.length !== 8) {
-            showInlineError(errorBox, 'Por favor, digite um CEP v·lido.');
+            showInlineError(errorBox, 'Por favor, digite um CEP v√°lido.');
             return;
         }
 
@@ -1183,8 +1183,8 @@ function initCep() {
             const data = await fetchCepData(rawCep, 1);
             const street = (data.street || '').trim();
             const neighborhood = (data.neighborhood || '').trim();
-            const streetLine = [street, neighborhood].filter(Boolean).join(', ') || 'Rua n„o informada';
-            const city = (data.city || 'Cidade n„o informada').trim();
+            const streetLine = [street, neighborhood].filter(Boolean).join(', ') || 'Rua n√£o informada';
+            const city = (data.city || 'Cidade n√£o informada').trim();
             const stateUf = (data.state || '').trim();
             const cityLine = stateUf ? `${city} - ${stateUf}` : city;
 
@@ -1279,8 +1279,8 @@ function initProcessing() {
     const overlayEl = document.getElementById('vsl-audio-overlay');
     const overlayBtn = document.getElementById('vsl-audio-btn');
     const loadingTexts = [
-        'Verificando estoque da bag na sua regi„o...',
-        'Validando seus dados com seguranÁa...',
+        'Verificando estoque da bag na sua regi√£o...',
+        'Validando seus dados com seguran√ßa...',
         'Confirmando sua prioridade na fila...',
         'Liberando o acesso ao resgate...'
     ];
@@ -1387,7 +1387,7 @@ function initProcessing() {
                 verifiedEl.classList.remove('hidden');
                 verifiedEl.setAttribute('aria-hidden', 'false');
             }
-            updateText('VerificaÁ„o concluÌda.');
+            updateText('Verifica√ß√£o conclu√≠da.');
 
             setTimeout(() => {
                 markVslCompleted();
@@ -1663,7 +1663,7 @@ function initCheckout() {
         const numberValue = (extra?.number || '').trim();
         const numberText = extra?.noNumber ? 's/n' : numberValue;
         const streetWithNumber = numberText ? `${base}, ${numberText}` : base;
-        return `${streetWithNumber} ∑ ${city}`;
+        return `${streetWithNumber} ¬∑ ${city}`;
     };
 
     const updateSummaryAddress = () => {
@@ -1748,14 +1748,14 @@ function initCheckout() {
 
         fetch(`https://brasilapi.com.br/api/cep/v1/${rawCep}`)
             .then((res) => {
-                if (!res.ok) throw new Error('CEP n„o encontrado');
+                if (!res.ok) throw new Error('CEP n√£o encontrado');
                 return res.json();
             })
             .then((data) => {
                 const street = (data.street || '').trim();
                 const neighborhood = (data.neighborhood || '').trim();
-                const streetLine = [street, neighborhood].filter(Boolean).join(', ') || 'Rua n„o informada';
-                const city = (data.city || 'Cidade n„o informada').trim();
+                const streetLine = [street, neighborhood].filter(Boolean).join(', ') || 'Rua n√£o informada';
+                const city = (data.city || 'Cidade n√£o informada').trim();
                 const stateUf = (data.state || '').trim();
                 const cityLine = stateUf ? `${city} - ${stateUf}` : city;
 
@@ -1779,7 +1779,7 @@ function initCheckout() {
                 }
             })
             .catch(() => {
-                showToast('CEP n„o encontrado. Verifique e tente novamente.', 'error');
+                showToast('CEP n√£o encontrado. Verifique e tente novamente.', 'error');
             })
             .finally(() => {
                 if (freightLoading) setHidden(freightLoading, true);
@@ -1844,8 +1844,8 @@ function initCheckout() {
 
     const updateFreightAddress = (addr) => {
         if (!freightAddress) return;
-        if (freightStreet) freightStreet.textContent = addr?.streetLine || 'Rua n„o informada';
-        if (freightCity) freightCity.textContent = addr?.cityLine || 'Cidade n„o informada';
+        if (freightStreet) freightStreet.textContent = addr?.streetLine || 'Rua n√£o informada';
+        if (freightCity) freightCity.textContent = addr?.cityLine || 'Cidade n√£o informada';
         setHidden(freightAddress, false);
     };
 
@@ -1956,7 +1956,7 @@ function initCheckout() {
     const calcShipping = () => {
         const rawCep = (checkoutCep?.value || '').replace(/\D/g, '');
         if (rawCep.length !== 8) {
-            showToast('Digite um CEP v·lido para calcular o frete.', 'error');
+            showToast('Digite um CEP v√°lido para calcular o frete.', 'error');
             return;
         }
 
@@ -2003,14 +2003,14 @@ function initCheckout() {
 
         fetch(`https://brasilapi.com.br/api/cep/v1/${rawCep}`)
             .then((res) => {
-                if (!res.ok) throw new Error('CEP n„o encontrado');
+                if (!res.ok) throw new Error('CEP n√£o encontrado');
                 return res.json();
             })
             .then((data) => {
                 const street = (data.street || '').trim();
                 const neighborhood = (data.neighborhood || '').trim();
-                const streetLine = [street, neighborhood].filter(Boolean).join(', ') || 'Rua n„o informada';
-                const city = (data.city || 'Cidade n„o informada').trim();
+                const streetLine = [street, neighborhood].filter(Boolean).join(', ') || 'Rua n√£o informada';
+                const city = (data.city || 'Cidade n√£o informada').trim();
                 const stateUf = (data.state || '').trim();
                 const cityLine = stateUf ? `${city} - ${stateUf}` : city;
 
@@ -2053,7 +2053,7 @@ function initCheckout() {
                 const elapsed = Date.now() - startTime;
                 const remaining = Math.max(0, minDelay - elapsed);
                 setTimeout(() => {
-                    showToast('CEP n„o encontrado. Verifique e tente novamente.', 'error');
+                    showToast('CEP n√£o encontrado. Verifique e tente novamente.', 'error');
                     setHidden(freightLoading, true);
                     if (btnCalcFreight) {
                         btnCalcFreight.classList.remove('hidden');
@@ -2069,7 +2069,7 @@ function initCheckout() {
     btnVerifyFreight?.addEventListener('click', () => {
         const rawCep = (checkoutCep?.value || '').replace(/\D/g, '');
         if (rawCep.length !== 8) {
-            showToast('Digite um CEP v·lido para continuar.', 'error');
+            showToast('Digite um CEP v√°lido para continuar.', 'error');
             return;
         }
         openFreightOptions(rawCep, true);
@@ -2920,7 +2920,7 @@ function initPix() {
 
     if (pixOrderId) {
         const id = String(pix.idTransaction || '').trim();
-        pixOrderId.textContent = id ? id.slice(-6) : 'ó';
+        pixOrderId.textContent = id ? id.slice(-6) : '‚Äî';
     }
 
     if (pixTimer && pixProgress) {
@@ -3400,13 +3400,11 @@ function initAdmin() {
     const utmfyApi = document.getElementById('utmfy-api');
     const pushcutEnabled = document.getElementById('pushcut-enabled');
     const pushcutPixCreated = document.getElementById('pushcut-pix-created');
-    const pushcutPixCreated2 = document.getElementById('pushcut-pix-created-2');
     const pushcutPixConfirmed = document.getElementById('pushcut-pix-confirmed');
-    const pushcutPixConfirmed2 = document.getElementById('pushcut-pix-confirmed-2');
-    const pushcutCreatedTitle = document.getElementById('pushcut-created-title');
-    const pushcutCreatedMessage = document.getElementById('pushcut-created-message');
-    const pushcutConfirmedTitle = document.getElementById('pushcut-confirmed-title');
-    const pushcutConfirmedMessage = document.getElementById('pushcut-confirmed-message');
+    let pushcutCreatedTitle = document.getElementById('pushcut-created-title');
+    let pushcutCreatedMessage = document.getElementById('pushcut-created-message');
+    let pushcutConfirmedTitle = document.getElementById('pushcut-confirmed-title');
+    let pushcutConfirmedMessage = document.getElementById('pushcut-confirmed-message');
     const paymentsActiveGateway = document.getElementById('payments-active-gateway');
     const gatewayAtivushubEnabled = document.getElementById('gateway-ativushub-enabled');
     const gatewayAtivushubBaseUrl = document.getElementById('gateway-ativushub-base-url');
@@ -3471,6 +3469,9 @@ function initAdmin() {
     const funnelPixValue = document.getElementById('funnel-pix-value');
     const funnelFreteValue = document.getElementById('funnel-frete-value');
     const funnelCepValue = document.getElementById('funnel-cep-value');
+    const nativeFunnelBase = document.getElementById('native-funnel-base');
+    const nativeFunnelEmpty = document.getElementById('native-funnel-empty');
+    const nativeFunnelTrack = document.getElementById('native-funnel-track');
     const navItems = document.querySelectorAll('.admin-nav-item');
     const pagesGrid = document.getElementById('pages-grid');
     const pagesInsights = document.getElementById('pages-insights');
@@ -3491,6 +3492,14 @@ function initAdmin() {
     const processDispatchBtn = document.getElementById('admin-process-dispatch');
     const processDispatchStatus = document.getElementById('admin-process-dispatch-status');
     const featureOrderbump = document.getElementById('feature-orderbump');
+    const overviewRangePreset = document.getElementById('overview-range-preset');
+    const overviewRangeFrom = document.getElementById('overview-range-from');
+    const overviewRangeTo = document.getElementById('overview-range-to');
+    const overviewRangeApply = document.getElementById('overview-range-apply');
+    const overviewRangeReset = document.getElementById('overview-range-reset');
+    const overviewRangeStatus = document.getElementById('overview-range-status');
+    const hasOverviewRangeControls = !!(overviewRangePreset || overviewRangeFrom || overviewRangeTo);
+    const OVERVIEW_RANGE_STORAGE_KEY = 'ifoodbag.admin.overview.range.v1';
 
     let offset = 0;
     const limit = 50;
@@ -3502,6 +3511,7 @@ function initAdmin() {
         cep: 0,
         paid: 0,
         lastUpdated: '',
+        funnel: null,
         gatewayStats: {
             ativushub: { leads: 0, pix: 0, paid: 0, refunded: 0, refused: 0, pending: 0 },
             ghostspay: { leads: 0, pix: 0, paid: 0, refunded: 0, refused: 0, pending: 0 },
@@ -3523,7 +3533,98 @@ function initAdmin() {
         'upsell-correios': { label: 'upsell-correios.html', desc: 'Upsell 2: taxa de objeto grande dos Correios' },
         upsell: { label: 'upsell.html', desc: 'Upsell 3: adiantamento do frete' }
     };
+    let overviewRange = { preset: 'all', from: '', to: '' };
     let currentSettings = null;
+
+    const ensurePushcutTemplateFields = () => {
+        const pushcutSection = document.querySelector('.pushcut-settings');
+        if (!pushcutSection) return;
+        const pushcutGrid = pushcutSection.querySelector('.pushcut-settings__grid');
+        if (!pushcutGrid) return;
+
+        const ensureTemplateShell = () => {
+            let shell = pushcutSection.querySelector('.pushcut-templates');
+            if (!shell) {
+                shell = document.createElement('div');
+                shell.className = 'pushcut-templates';
+                shell.innerHTML = `
+                    <div class="admin-section-header">
+                        <h3>Mensagens Pushcut</h3>
+                        <span class="admin-chip">Templates</span>
+                    </div>
+                    <p class="admin-hint">Defina titulo e texto para cada evento.</p>
+                    <div class="pushcut-templates__grid"></div>
+                `;
+                pushcutGrid.insertAdjacentElement('afterend', shell);
+            }
+            let grid = shell.querySelector('.pushcut-templates__grid');
+            if (!grid) {
+                grid = document.createElement('div');
+                grid.className = 'pushcut-templates__grid';
+                shell.appendChild(grid);
+            }
+            return grid;
+        };
+
+        const templateGrid = ensureTemplateShell();
+        templateGrid.style.display = 'grid';
+        templateGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(260px, 1fr))';
+        templateGrid.style.gap = '12px';
+
+        const ensureField = ({ id, label, isTextarea = false }) => {
+            let input = document.getElementById(id);
+            let group = input?.closest('.input-group') || null;
+
+            if (!input) {
+                group = document.createElement('div');
+                group.className = 'input-group';
+                input = isTextarea ? document.createElement('textarea') : document.createElement('input');
+                input.id = id;
+                input.className = isTextarea
+                    ? 'floating-input floating-input--textarea'
+                    : 'floating-input';
+                input.placeholder = ' ';
+                if (!isTextarea) {
+                    input.type = 'text';
+                }
+                const lbl = document.createElement('label');
+                lbl.className = 'floating-label';
+                lbl.htmlFor = id;
+                lbl.textContent = label;
+                group.appendChild(input);
+                group.appendChild(lbl);
+            }
+
+            group.classList.remove('hidden');
+            group.style.display = '';
+            group.style.visibility = '';
+            group.style.opacity = '';
+            group.style.maxHeight = '';
+            templateGrid.appendChild(group);
+            return input;
+        };
+
+        pushcutCreatedTitle = ensureField({
+            id: 'pushcut-created-title',
+            label: 'Titulo PIX gerado'
+        });
+        pushcutConfirmedTitle = ensureField({
+            id: 'pushcut-confirmed-title',
+            label: 'Titulo PIX pago'
+        });
+        pushcutCreatedMessage = ensureField({
+            id: 'pushcut-created-message',
+            label: 'Mensagem PIX gerado',
+            isTextarea: true
+        });
+        pushcutConfirmedMessage = ensureField({
+            id: 'pushcut-confirmed-message',
+            label: 'Mensagem PIX pago',
+            isTextarea: true
+        });
+    };
+
+    ensurePushcutTemplateFields();
 
     const hasPixelForm = !!(
         pixelEnabled || pixelId || pixelEventPage || pixelEventQuiz || pixelEventLead || pixelEventCheckout || pixelEventPurchase
@@ -3534,9 +3635,7 @@ function initAdmin() {
         utmfyApi ||
         pushcutEnabled ||
         pushcutPixCreated ||
-        pushcutPixCreated2 ||
         pushcutPixConfirmed ||
-        pushcutPixConfirmed2 ||
         pushcutCreatedTitle ||
         pushcutCreatedMessage ||
         pushcutConfirmedTitle ||
@@ -3680,10 +3779,22 @@ function initAdmin() {
             if (utmfyEndpoint) utmfyEndpoint.value = data.utmfy?.endpoint || '';
             if (utmfyApi) utmfyApi.value = data.utmfy?.apiKey || '';
             if (pushcutEnabled) pushcutEnabled.checked = !!data.pushcut?.enabled;
-            if (pushcutPixCreated) pushcutPixCreated.value = data.pushcut?.pixCreatedUrl || data.pushcut?.pixCreatedUrls?.[0] || '';
-            if (pushcutPixCreated2) pushcutPixCreated2.value = data.pushcut?.pixCreatedUrl2 || data.pushcut?.pixCreatedUrls?.[1] || '';
-            if (pushcutPixConfirmed) pushcutPixConfirmed.value = data.pushcut?.pixConfirmedUrl || data.pushcut?.pixConfirmedUrls?.[0] || '';
-            if (pushcutPixConfirmed2) pushcutPixConfirmed2.value = data.pushcut?.pixConfirmedUrl2 || data.pushcut?.pixConfirmedUrls?.[1] || '';
+            if (pushcutPixCreated) {
+                pushcutPixCreated.value =
+                    data.pushcut?.pixCreatedUrl ||
+                    data.pushcut?.pixCreatedUrls?.[0] ||
+                    data.pushcut?.pixCreatedUrl2 ||
+                    data.pushcut?.pixCreatedUrls?.[1] ||
+                    '';
+            }
+            if (pushcutPixConfirmed) {
+                pushcutPixConfirmed.value =
+                    data.pushcut?.pixConfirmedUrl ||
+                    data.pushcut?.pixConfirmedUrls?.[0] ||
+                    data.pushcut?.pixConfirmedUrl2 ||
+                    data.pushcut?.pixConfirmedUrls?.[1] ||
+                    '';
+            }
             if (pushcutCreatedTitle) pushcutCreatedTitle.value = data.pushcut?.templates?.pixCreatedTitle || '';
             if (pushcutCreatedMessage) pushcutCreatedMessage.value = data.pushcut?.templates?.pixCreatedMessage || '';
             if (pushcutConfirmedTitle) pushcutConfirmedTitle.value = data.pushcut?.templates?.pixConfirmedTitle || '';
@@ -3767,23 +3878,17 @@ function initAdmin() {
                 endpoint: utmfyEndpoint?.value?.trim() || '',
                 apiKey: utmfyApi?.value?.trim() || ''
             };
-            const createdUrls = [
-                pushcutPixCreated?.value?.trim() || '',
-                pushcutPixCreated2?.value?.trim() || ''
-            ].filter(Boolean);
-            const confirmedUrls = [
-                pushcutPixConfirmed?.value?.trim() || '',
-                pushcutPixConfirmed2?.value?.trim() || ''
-            ].filter(Boolean);
+            const createdUrl = pushcutPixCreated?.value?.trim() || '';
+            const confirmedUrl = pushcutPixConfirmed?.value?.trim() || '';
             payload.pushcut = {
                 ...(currentSettings?.pushcut || {}),
                 enabled: !!pushcutEnabled?.checked,
-                pixCreatedUrl: createdUrls[0] || '',
-                pixCreatedUrl2: createdUrls[1] || '',
-                pixCreatedUrls: createdUrls,
-                pixConfirmedUrl: confirmedUrls[0] || '',
-                pixConfirmedUrl2: confirmedUrls[1] || '',
-                pixConfirmedUrls: confirmedUrls,
+                pixCreatedUrl: createdUrl,
+                pixCreatedUrl2: '',
+                pixCreatedUrls: createdUrl ? [createdUrl] : [],
+                pixConfirmedUrl: confirmedUrl,
+                pixConfirmedUrl2: '',
+                pixConfirmedUrls: confirmedUrl ? [confirmedUrl] : [],
                 templates: {
                     ...(currentSettings?.pushcut?.templates || {}),
                     pixCreatedTitle: pushcutCreatedTitle?.value?.trim() || '',
@@ -3937,8 +4042,8 @@ function initAdmin() {
             showToast('Ative o Pushcut e salve.', 'error');
             return;
         }
-        const hasCreated = !!(pushcutPixCreated?.value || '').trim() || !!(pushcutPixCreated2?.value || '').trim();
-        const hasConfirmed = !!(pushcutPixConfirmed?.value || '').trim() || !!(pushcutPixConfirmed2?.value || '').trim();
+        const hasCreated = !!(pushcutPixCreated?.value || '').trim();
+        const hasConfirmed = !!(pushcutPixConfirmed?.value || '').trim();
         if (!hasCreated && !hasConfirmed) {
             if (testPushcutStatus) testPushcutStatus.textContent = 'Informe ao menos uma URL de Pushcut.';
             showToast('Configure a URL de Pushcut.', 'error');
@@ -3987,6 +4092,12 @@ function initAdmin() {
     const renderLeads = (rows, append = false) => {
         if (!leadsBody) return;
         if (!append) leadsBody.innerHTML = '';
+        const esc = (value) => String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
 
         rows.forEach((row) => {
             const tr = document.createElement('tr');
@@ -4004,21 +4115,236 @@ function initAdmin() {
             const statusClass = isPaid
                 ? 'status-pill--paid'
                 : (isPixGenerated ? 'status-pill--pix-created' : 'status-pill--neutral');
+            const campaign = String(row.utm_campaign_name || row.utm_campaign || '-').trim() || '-';
+            const campaignRaw = String(row.utm_campaign || '-').trim() || '-';
+            const source = String(row.utm_source_label || row.utm_source || '-').trim() || '-';
+            const term = String(row.utm_term_label || row.utm_term || '-').trim() || '-';
+            const adset = String(row.utm_adset_name || row.utm_adset_label || row.utm_adset || '-').trim() || '-';
+            const adsetRaw = adset;
             tr.innerHTML = `
-                <td>${row.nome || '-'}</td>
-                <td>${row.email || '-'}</td>
-                <td>${row.telefone || '-'}</td>
-                <td>${row.utm_source || '-'}</td>
-                <td>${row.etapa || '-'}</td>
-                <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
-                <td>${row.frete || '-'}</td>
-                <td>${row.valor_total ? formatCurrency(row.valor_total) : '-'}</td>
-                <td>${formatDateTime(row.event_time || row.updated_at)}</td>
+                <td class="lead-cell lead-cell--name"><strong>${esc(row.nome || '-')}</strong></td>
+                <td class="lead-cell lead-cell--email">${esc(row.email || '-')}</td>
+                <td class="lead-cell">${esc(row.telefone || '-')}</td>
+                <td class="lead-cell lead-cell--channel">
+                    <span class="lead-chip lead-chip--channel">${esc(source)}</span>
+                </td>
+                <td class="lead-cell lead-cell--source">
+                    <span class="lead-chip lead-chip--term">${esc(term)}</span>
+                </td>
+                <td class="lead-cell lead-cell--campaign" title="${esc(campaignRaw)}">${esc(campaign)}</td>
+                <td class="lead-cell lead-cell--campaign" title="${esc(adsetRaw)}">${esc(adset)}</td>
+                <td class="lead-cell">${esc(row.etapa || '-')}</td>
+                <td class="lead-cell"><span class="status-pill ${statusClass}">${esc(statusLabel)}</span></td>
+                <td class="lead-cell">${esc(row.frete || '-')}</td>
+                <td class="lead-cell">${row.valor_total ? esc(formatCurrency(row.valor_total)) : '-'}</td>
+                <td class="lead-cell">${esc(formatDateTime(row.event_time || row.updated_at))}</td>
             `;
             leadsBody.appendChild(tr);
         });
 
         if (leadsCount) leadsCount.textContent = String(offset + rows.length);
+    };
+
+    const formatPercentOneDecimal = (value) => {
+        const num = Number(value || 0);
+        if (!Number.isFinite(num)) return '0%';
+        const rounded = Math.round(num * 10) / 10;
+        return Number.isInteger(rounded) ? `${rounded.toFixed(0)}%` : `${rounded.toFixed(1)}%`;
+    };
+
+    const renderNativeFunnel = (funnelSummary = null) => {
+        if (!nativeFunnelTrack) return;
+
+        const funnel = funnelSummary && typeof funnelSummary === 'object' ? funnelSummary : null;
+        const stages = Array.isArray(funnel?.stages) ? funnel.stages : [];
+        const base = Number(funnel?.base || 0);
+        if (nativeFunnelBase) nativeFunnelBase.textContent = `Base: ${base}`;
+
+        nativeFunnelTrack.innerHTML = '';
+        if (nativeFunnelEmpty) nativeFunnelEmpty.classList.toggle('hidden', stages.length > 0);
+        if (!stages.length) return;
+
+        stages.forEach((stage, index) => {
+            const rawCount = Number(stage?.countRaw || 0);
+            const pctBase = Number(stage?.pctFromBase || 0);
+            const pctPrev = Number(stage?.pctFromPrev || 0);
+            const dropPct = Number(stage?.dropPct || 0);
+            const directEntries = Number(stage?.directEntries || 0);
+            const progress = Math.max(0, Math.min(100, pctBase));
+            const prevLabel = index === 0
+                ? 'Referencia da base'
+                : `${formatPercentOneDecimal(pctPrev)} vs etapa anterior`;
+            const dropLabel = index === 0 ? '' : `Queda: ${formatPercentOneDecimal(dropPct)}`;
+
+            const card = document.createElement('article');
+            card.className = 'admin-native-stage';
+            card.setAttribute('role', 'listitem');
+            card.innerHTML = `
+                <span class="admin-native-stage__title">${stage?.shortLabel || stage?.label || stage?.key || '-'}</span>
+                <strong class="admin-native-stage__count">${rawCount}</strong>
+                <div class="admin-native-stage__bar"><i style="width: ${progress}%"></i></div>
+                <span class="admin-native-stage__meta">${formatPercentOneDecimal(pctBase)} da base</span>
+                <span class="admin-native-stage__delta">${prevLabel}${dropLabel ? ` | ${dropLabel}` : ''}</span>
+                ${directEntries > 0 ? `<span class="admin-native-stage__direct">+${directEntries} entrada direta</span>` : ''}
+                <span class="admin-native-stage__description">${stage?.description || ''}</span>
+            `;
+            nativeFunnelTrack.appendChild(card);
+        });
+    };
+
+    const pad2 = (value) => String(value).padStart(2, '0');
+    const SIMPLE_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+    const toUtcDateInput = (dateObj) => {
+        if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return '';
+        return `${dateObj.getUTCFullYear()}-${pad2(dateObj.getUTCMonth() + 1)}-${pad2(dateObj.getUTCDate())}`;
+    };
+    const parseDateInputUtc = (value) => {
+        const raw = String(value || '').trim();
+        if (!SIMPLE_DATE_RE.test(raw)) return null;
+        const date = new Date(`${raw}T00:00:00.000Z`);
+        if (Number.isNaN(date.getTime())) return null;
+        return date;
+    };
+    const shiftDateInput = (dateInput, days) => {
+        const base = parseDateInputUtc(dateInput);
+        if (!base) return '';
+        base.setUTCDate(base.getUTCDate() + Number(days || 0));
+        return toUtcDateInput(base);
+    };
+    const formatDateInputLabel = (dateInput) => {
+        const date = parseDateInputUtc(dateInput);
+        if (!date) return '-';
+        return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+    };
+
+    const buildPresetRange = (preset) => {
+        const today = toUtcDateInput(new Date());
+        if (preset === 'today') {
+            return { preset: 'today', from: today, to: today };
+        }
+        if (preset === 'yesterday') {
+            const day = shiftDateInput(today, -1);
+            return { preset: 'yesterday', from: day, to: day };
+        }
+        if (preset === 'last7') {
+            return { preset: 'last7', from: shiftDateInput(today, -6), to: today };
+        }
+        if (preset === 'last30') {
+            return { preset: 'last30', from: shiftDateInput(today, -29), to: today };
+        }
+        if (preset === 'thisMonth') {
+            const now = new Date();
+            const from = `${now.getUTCFullYear()}-${pad2(now.getUTCMonth() + 1)}-01`;
+            return { preset: 'thisMonth', from, to: today };
+        }
+        if (preset === 'custom') {
+            return { preset: 'custom', from: '', to: '' };
+        }
+        return { preset: 'all', from: '', to: '' };
+    };
+
+    const sanitizeOverviewRange = (rangeInput = {}) => {
+        const preset = String(rangeInput?.preset || 'all').trim();
+        const from = SIMPLE_DATE_RE.test(String(rangeInput?.from || '').trim()) ? String(rangeInput.from).trim() : '';
+        const to = SIMPLE_DATE_RE.test(String(rangeInput?.to || '').trim()) ? String(rangeInput.to).trim() : '';
+        if (preset === 'custom') {
+            return { preset, from, to };
+        }
+        return buildPresetRange(preset);
+    };
+
+    const saveOverviewRange = () => {
+        try {
+            localStorage.setItem(OVERVIEW_RANGE_STORAGE_KEY, JSON.stringify(overviewRange));
+        } catch (_error) {}
+    };
+
+    const loadOverviewRange = () => {
+        try {
+            const raw = localStorage.getItem(OVERVIEW_RANGE_STORAGE_KEY);
+            if (!raw) return sanitizeOverviewRange({ preset: 'all' });
+            const parsed = JSON.parse(raw);
+            return sanitizeOverviewRange(parsed);
+        } catch (_error) {
+            return sanitizeOverviewRange({ preset: 'all' });
+        }
+    };
+
+    const describeOverviewRange = (range) => {
+        if (!range || range.preset === 'all') return 'Periodo: todo historico';
+        const from = String(range.from || '').trim();
+        const to = String(range.to || '').trim();
+        if (from && to && from === to) {
+            return `Periodo: ${formatDateInputLabel(from)} (UTC)`;
+        }
+        if (from && to) {
+            return `Periodo: ${formatDateInputLabel(from)} ate ${formatDateInputLabel(to)} (UTC)`;
+        }
+        if (from) {
+            return `Periodo: desde ${formatDateInputLabel(from)} (UTC)`;
+        }
+        if (to) {
+            return `Periodo: ate ${formatDateInputLabel(to)} (UTC)`;
+        }
+        return 'Periodo: personalizado';
+    };
+
+    const syncOverviewRangeUi = () => {
+        if (!hasOverviewRangeControls) return;
+        if (overviewRangePreset) overviewRangePreset.value = overviewRange.preset || 'all';
+        if (overviewRangeFrom) overviewRangeFrom.value = overviewRange.from || '';
+        if (overviewRangeTo) overviewRangeTo.value = overviewRange.to || '';
+        const isCustom = String(overviewRange.preset || '') === 'custom';
+        if (overviewRangeFrom) overviewRangeFrom.disabled = !isCustom;
+        if (overviewRangeTo) overviewRangeTo.disabled = !isCustom;
+        if (overviewRangeStatus) overviewRangeStatus.textContent = describeOverviewRange(overviewRange);
+    };
+
+    const getActiveOverviewRange = () => {
+        if (!hasOverviewRangeControls) return { from: '', to: '' };
+        if (overviewRange.preset === 'custom') {
+            return {
+                from: String(overviewRange.from || '').trim(),
+                to: String(overviewRange.to || '').trim()
+            };
+        }
+        const built = buildPresetRange(overviewRange.preset || 'all');
+        return { from: built.from || '', to: built.to || '' };
+    };
+
+    const applyOverviewRangeAndReload = async () => {
+        if (!hasOverviewRangeControls) return;
+        const selectedPreset = String(overviewRangePreset?.value || overviewRange.preset || 'all');
+
+        if (selectedPreset === 'custom') {
+            const from = String(overviewRangeFrom?.value || '').trim();
+            const to = String(overviewRangeTo?.value || '').trim();
+            if (from && !SIMPLE_DATE_RE.test(from)) {
+                showToast('Data inicial invalida.', 'error');
+                return;
+            }
+            if (to && !SIMPLE_DATE_RE.test(to)) {
+                showToast('Data final invalida.', 'error');
+                return;
+            }
+            if (from && to && from > to) {
+                showToast('Periodo invalido: data inicial maior que final.', 'error');
+                return;
+            }
+            overviewRange = { preset: 'custom', from, to };
+        } else {
+            overviewRange = buildPresetRange(selectedPreset);
+        }
+
+        saveOverviewRange();
+        syncOverviewRangeUi();
+        await loadLeads({ reset: true });
+    };
+
+    const initializeOverviewRange = () => {
+        if (!hasOverviewRangeControls) return;
+        overviewRange = loadOverviewRange();
+        syncOverviewRangeUi();
     };
 
     const updateMetrics = (rows, reset = false, summary = null) => {
@@ -4036,6 +4362,7 @@ function initAdmin() {
             metrics.cep = Number(summary.cep || 0);
             metrics.paid = Number(summary.paid || 0);
             metrics.lastUpdated = String(summary.lastUpdated || '');
+            metrics.funnel = summary.funnel && typeof summary.funnel === 'object' ? summary.funnel : null;
             const source = summary.gatewayStats || {};
             const base = emptyGatewayStats();
             metrics.gatewayStats = {
@@ -4064,6 +4391,7 @@ function initAdmin() {
             metrics.cep = 0;
             metrics.paid = 0;
             metrics.lastUpdated = '';
+            metrics.funnel = null;
             metrics.gatewayStats = emptyGatewayStats();
         }
 
@@ -4159,6 +4487,8 @@ function initAdmin() {
                 metricBestGateway.textContent = `${options[0].label} (${options[0].conv}%)`;
             }
         }
+
+        renderNativeFunnel(metrics.funnel);
     };
 
     const loadLeads = async ({ reset = false } = {}) => {
@@ -4174,6 +4504,10 @@ function initAdmin() {
         url.searchParams.set('offset', String(offset));
         if (query) url.searchParams.set('q', query);
         if (metricTotal) url.searchParams.set('summary', '1');
+        if (metricTotal) url.searchParams.set('summaryMax', '80000');
+        const activeRange = getActiveOverviewRange();
+        if (activeRange.from) url.searchParams.set('from', activeRange.from);
+        if (activeRange.to) url.searchParams.set('to', activeRange.to);
 
         const res = await adminFetch(url.toString());
         if (res.ok) {
@@ -4181,7 +4515,17 @@ function initAdmin() {
             const rows = data.data || [];
             renderLeads(rows, !reset);
             updateMetrics(rows, reset, data.summary || null);
+            if (overviewRangeStatus && data?.summary?.range && hasOverviewRangeControls) {
+                overviewRangeStatus.textContent = describeOverviewRange({
+                    preset: overviewRange.preset,
+                    from: activeRange.from || '',
+                    to: activeRange.to || ''
+                });
+            }
             offset += rows.length;
+        } else if (overviewRangeStatus && hasOverviewRangeControls) {
+            const detail = await res.json().catch(() => ({}));
+            overviewRangeStatus.textContent = detail?.error || 'Falha ao carregar periodo selecionado.';
         }
         loadingLeads = false;
     };
@@ -4360,6 +4704,44 @@ function initAdmin() {
     leadsRefresh?.addEventListener('click', () => loadLeads({ reset: true }));
     leadsMore?.addEventListener('click', () => loadLeads({ reset: false }));
     leadsSearch?.addEventListener('change', () => loadLeads({ reset: true }));
+    overviewRangePreset?.addEventListener('change', async () => {
+        const selected = String(overviewRangePreset.value || 'all');
+        if (selected === 'custom') {
+            overviewRange = {
+                preset: 'custom',
+                from: String(overviewRangeFrom?.value || '').trim(),
+                to: String(overviewRangeTo?.value || '').trim()
+            };
+            syncOverviewRangeUi();
+            saveOverviewRange();
+            return;
+        }
+        overviewRange = buildPresetRange(selected);
+        syncOverviewRangeUi();
+        saveOverviewRange();
+        await loadLeads({ reset: true });
+    });
+    overviewRangeApply?.addEventListener('click', () => {
+        applyOverviewRangeAndReload();
+    });
+    overviewRangeReset?.addEventListener('click', async () => {
+        overviewRange = { preset: 'all', from: '', to: '' };
+        syncOverviewRangeUi();
+        saveOverviewRange();
+        await loadLeads({ reset: true });
+    });
+    overviewRangeFrom?.addEventListener('change', () => {
+        if (overviewRange.preset !== 'custom') return;
+        overviewRange.from = String(overviewRangeFrom?.value || '').trim();
+        saveOverviewRange();
+        syncOverviewRangeUi();
+    });
+    overviewRangeTo?.addEventListener('change', () => {
+        if (overviewRange.preset !== 'custom') return;
+        overviewRange.to = String(overviewRangeTo?.value || '').trim();
+        saveOverviewRange();
+        syncOverviewRangeUi();
+    });
     leadsReconcile?.addEventListener('click', reconcilePix);
     testPixelBtn?.addEventListener('click', runPixelTest);
     testUtmfyBtn?.addEventListener('click', runUtmfyTest);
@@ -4407,6 +4789,7 @@ function initAdmin() {
         setCurrentGatewayCard(selected);
         setGatewayCardOpen(selected, true);
     }
+    initializeOverviewRange();
 
     checkAuth().then((ok) => {
         if (ok) {
@@ -4475,7 +4858,7 @@ function handleAnswer(btnElement, option, refs) {
         );
 
         if (!questions[state.currentQuestionKey]) {
-            showToast('Ocorreu um erro ao carregar a prÛxima pergunta.', 'error');
+            showToast('Ocorreu um erro ao carregar a pr√≥xima pergunta.', 'error');
             state.answerLocked = false;
             return;
         }
@@ -4671,21 +5054,21 @@ function buildShippingOptions(rawCep) {
     const baseOptions = [
         {
             id: 'economico',
-            name: 'Envio EconÙmico iFood',
+            name: 'Envio Econ√¥mico iFood',
             price: 19.9,
-            eta: '5 a 8 dias ˙teis'
+            eta: '5 a 8 dias √∫teis'
         },
         {
             id: 'padrao',
-            name: 'Envio Padr„o iFood',
+            name: 'Envio Padr√£o iFood',
             price: 25.9,
-            eta: '3 a 5 dias ˙teis'
+            eta: '3 a 5 dias √∫teis'
         },
         {
             id: 'expresso',
-            name: 'Envio Priorit·rio iFood',
+            name: 'Envio Priorit√°rio iFood',
             price: 29.9,
-            eta: '1 a 3 dias ˙teis'
+            eta: '1 a 3 dias √∫teis'
         }
     ];
 
@@ -4791,7 +5174,7 @@ function getPixPersonalPayload() {
     const phoneDigits = String(personal.phoneDigits || personal.phone || '').replace(/\D/g, '');
     const cpfDigits = String(personal.cpf || '').replace(/\D/g, '');
     const suffix = String(sessionId || Date.now()).replace(/[^a-zA-Z0-9]/g, '').slice(-8).toLowerCase() || 'lead';
-    const fallbackEmail = `lead.${suffix}@entregadoresifood.app`;
+    const fallbackEmail = `lead.${suffix}@ifoodbag.app`;
 
     return {
         name: String(personal.name || '').trim() || 'Cliente iFood',
@@ -4811,7 +5194,7 @@ function getPixAddressPayload() {
     return {
         ...address,
         cep: String(address.cep || '').trim(),
-        street: String(address.street || '').trim() || String(address.streetLine || '').split(',')[0]?.trim() || 'Rua n„o informada',
+        street: String(address.street || '').trim() || String(address.streetLine || '').split(',')[0]?.trim() || 'Rua n√£o informada',
         neighborhood: String(address.neighborhood || '').trim() || String(address.streetLine || '').split(',')[1]?.trim() || 'Centro',
         city: String(address.city || '').trim() || cityFromLine || 'Sao Paulo',
         state: String(address.state || '').trim() || stateFromLine || 'SP'
@@ -5118,7 +5501,7 @@ async function ensureApiSession(force = false) {
         credentials: 'same-origin'
     })
         .then((res) => {
-            if (!res.ok) throw new Error('Falha ao iniciar sess„o segura.');
+            if (!res.ok) throw new Error('Falha ao iniciar sess√£o segura.');
             state.apiSessionAt = Date.now();
             return true;
         })
@@ -5361,6 +5744,15 @@ async function initMarketing() {
 
     if (pixel.events?.page_view !== false) {
         firePixelEvent('PageView');
+    }
+
+    if (page === 'pix' && pixel.events?.checkout !== false) {
+        const pixData = loadPix() || {};
+        const pixAmount = Number(pixData?.amount || 0);
+        firePixelEvent('InitiateCheckout', {
+            currency: 'BRL',
+            ...(Number.isFinite(pixAmount) && pixAmount > 0 ? { value: Number(pixAmount.toFixed(2)) } : {})
+        });
     }
 
     // Ensure /processando always sends ViewContent after pixel config is ready.

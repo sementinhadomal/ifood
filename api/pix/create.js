@@ -98,6 +98,22 @@ function pickText(...values) {
     return '';
 }
 
+function buildSunizeUtmFields(rawBody = {}) {
+    const fields = {
+        utm_source: pickText(rawBody?.utm?.utm_source, rawBody?.utm_source),
+        utm_medium: pickText(rawBody?.utm?.utm_medium, rawBody?.utm_medium),
+        utm_campaign: pickText(rawBody?.utm?.utm_campaign, rawBody?.utm_campaign),
+        utm_term: pickText(rawBody?.utm?.utm_term, rawBody?.utm_term),
+        utm_content: pickText(rawBody?.utm?.utm_content, rawBody?.utm_content),
+        src: pickText(rawBody?.utm?.src, rawBody?.src),
+        sck: pickText(rawBody?.utm?.sck, rawBody?.sck),
+        fbclid: pickText(rawBody?.utm?.fbclid, rawBody?.fbclid),
+        gclid: pickText(rawBody?.utm?.gclid, rawBody?.gclid),
+        ttclid: pickText(rawBody?.utm?.ttclid, rawBody?.ttclid)
+    };
+    return Object.fromEntries(Object.entries(fields).filter(([, value]) => Boolean(String(value || '').trim())));
+}
+
 function sanitizeEventId(value = '', maxLen = 120) {
     const clean = String(value || '').trim();
     if (!clean) return '';
@@ -947,36 +963,93 @@ module.exports = async (req, res) => {
                     return res.status(500).json({ error: 'Credenciais Sunize nao configuradas.' });
                 }
 
-            const documentType = resolveDocumentType(cpf);
-            const phoneE164 = toE164Phone(phone);
-            const externalIdBase = upsellEnabled ? `${orderId}-upsell` : orderId;
-            externalId = `${externalIdBase}-${Date.now()}`;
+                const documentType = resolveDocumentType(cpf);
+                const phoneE164 = toE164Phone(phone);
+                const externalIdBase = upsellEnabled ? `${orderId}-upsell` : orderId;
+                externalId = `${externalIdBase}-${Date.now()}`;
 
-            const sunizeItems = items.map((item, index) => ({
-                id: `${normalizedShipping?.id || 'item'}-${index + 1}`,
-                title: String(item.title || 'Item'),
-                description: String(item.title || 'Item'),
-                price: Number(Number(item.unitPrice || 0).toFixed(2)),
-                quantity: Number(item.quantity || 1),
-                is_physical: false
-            }));
+                const sunizeItems = items.map((item, index) => ({
+                    id: `${normalizedShipping?.id || 'item'}-${index + 1}`,
+                    title: String(item.title || 'Item'),
+                    description: String(item.title || 'Item'),
+                    price: Number(Number(item.unitPrice || 0).toFixed(2)),
+                    quantity: Number(item.quantity || 1),
+                    is_physical: false
+                }));
 
-            const sunizePayload = {
-                external_id: externalId,
-                total_amount: Number(totalAmount.toFixed(2)),
-                payment_method: 'PIX',
-                items: sunizeItems,
-                ip: extractIp(req),
-                customer: {
-                    name,
-                    email,
-                    phone: phoneE164,
-                    document_type: documentType,
-                    document: cpf
-                }
-            };
+                const sunizeUtmFields = buildSunizeUtmFields(rawBody);
+                const hasSunizeUtmFields = Object.keys(sunizeUtmFields).length > 0;
+                const sunizeMetadata = {
+                    orderId,
+                    sessionId: sessionId || orderId,
+                    ...sunizeUtmFields
+                };
+                const sunizePayloadBase = {
+                    external_id: externalId,
+                    total_amount: Number(totalAmount.toFixed(2)),
+                    payment_method: 'PIX',
+                    items: sunizeItems,
+                    ip: extractIp(req),
+                    customer: {
+                        name,
+                        email,
+                        phone: phoneE164,
+                        document_type: documentType,
+                        document: cpf
+                    }
+                };
+                const sunizePayload = {
+                    ...sunizePayloadBase,
+                    ...sunizeUtmFields,
+                    metadata: sunizeMetadata
+                };
 
                 ({ response, data } = await requestSunizeCreate(gatewayConfig, sunizePayload));
+                const shouldRetryWithoutTopLevelUtm = (
+                    Number(response?.status || 0) === 400 &&
+                    hasSunizeUtmFields &&
+                    (!response?.ok || data?.hasError === true)
+                );
+                const shouldRetryWithoutMetadata = (
+                    Number(response?.status || 0) === 400 &&
+                    (!response?.ok || data?.hasError === true)
+                );
+                let retriedWithoutMetadata = false;
+                if (shouldRetryWithoutTopLevelUtm) {
+                    const metadataOnlyPayload = {
+                        ...sunizePayloadBase,
+                        metadata: sunizeMetadata
+                    };
+                    const metadataRetry = await requestSunizeCreate(gatewayConfig, metadataOnlyPayload);
+                    if (metadataRetry?.response?.ok && metadataRetry?.data?.hasError !== true) {
+                        response = metadataRetry.response;
+                        data = metadataRetry.data;
+                    } else if (Number(metadataRetry?.response?.status || 0) === 400) {
+                        const fallbackRetry = await requestSunizeCreate(gatewayConfig, sunizePayloadBase);
+                        retriedWithoutMetadata = true;
+                        if (fallbackRetry?.response?.ok && fallbackRetry?.data?.hasError !== true) {
+                            response = fallbackRetry.response;
+                            data = fallbackRetry.data;
+                        } else {
+                            response = metadataRetry?.response || fallbackRetry?.response || response;
+                            data = metadataRetry?.data || fallbackRetry?.data || data;
+                        }
+                    } else {
+                        response = metadataRetry?.response || response;
+                        data = metadataRetry?.data || data;
+                    }
+                }
+                if (!retriedWithoutMetadata && shouldRetryWithoutMetadata && Number(response?.status || 0) === 400) {
+                    const fallbackRetry = await requestSunizeCreate(gatewayConfig, sunizePayloadBase);
+                    retriedWithoutMetadata = true;
+                    if (fallbackRetry?.response?.ok && fallbackRetry?.data?.hasError !== true) {
+                        response = fallbackRetry.response;
+                        data = fallbackRetry.data;
+                    } else {
+                        response = fallbackRetry?.response || response;
+                        data = fallbackRetry?.data || data;
+                    }
+                }
                 if (!response?.ok) {
                     createInflightError = new Error('sunize_create_failed');
                     return res.status(response?.status || 502).json({
@@ -1263,6 +1336,20 @@ module.exports = async (req, res) => {
                 customerEmail: email,
                 shippingName: normalizedShipping?.name || '',
                 cep: zipCode,
+                utm: rawBody.utm || {},
+                utm_source: rawBody?.utm?.utm_source || rawBody?.utm_source || '',
+                utm_campaign: rawBody?.utm?.utm_campaign || rawBody?.utm_campaign || '',
+                utm_term: rawBody?.utm?.utm_term || rawBody?.utm_term || '',
+                utm_content: rawBody?.utm?.utm_content || rawBody?.utm_content || '',
+                campaign: rawBody?.utm?.utm_campaign || rawBody?.utm_campaign || '',
+                adset: (
+                    rawBody?.utm?.utm_adset ||
+                    rawBody?.utm?.adset ||
+                    rawBody?.utm?.utm_content ||
+                    rawBody?.utm_adset ||
+                    rawBody?.utm_content ||
+                    ''
+                ),
                 gateway,
                 isUpsell: upsellEnabled
             };

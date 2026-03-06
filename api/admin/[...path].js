@@ -67,6 +67,113 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.en
 const pick = (...values) => values.find((value) => value !== undefined && value !== null && value !== '');
 const clamp = (value, min, max) => Math.min(Math.max(Number(value) || 0, min), max);
 const SECRET_MASK = '__SECRET_SET__';
+const SIMPLE_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const FUNNEL_OVERVIEW_STAGES = [
+    {
+        key: 'home',
+        label: 'Home',
+        shortLabel: 'Home',
+        source: 'page',
+        page: 'home',
+        description: 'Entrada no funil'
+    },
+    {
+        key: 'quiz',
+        label: 'Quiz',
+        shortLabel: 'Quiz',
+        source: 'page',
+        page: 'quiz',
+        description: 'Perguntas iniciais'
+    },
+    {
+        key: 'personal',
+        label: 'Dados pessoais',
+        shortLabel: 'Dados',
+        source: 'page',
+        page: 'personal',
+        description: 'Preenchimento dos dados'
+    },
+    {
+        key: 'cep',
+        label: 'Endereco',
+        shortLabel: 'Endereco',
+        source: 'page',
+        page: 'cep',
+        description: 'Confirmacao de CEP'
+    },
+    {
+        key: 'checkout',
+        label: 'Checkout',
+        shortLabel: 'Checkout',
+        source: 'page',
+        page: 'checkout',
+        description: 'Visita ao checkout'
+    },
+    {
+        key: 'frete_selected',
+        label: 'Frete selecionado',
+        shortLabel: 'Frete',
+        source: 'summary',
+        field: 'frete',
+        description: 'Frete escolhido no checkout'
+    },
+    {
+        key: 'orderbump',
+        label: 'Order bump',
+        shortLabel: 'Order bump',
+        source: 'page',
+        page: 'orderbump',
+        description: 'Oferta adicional exibida'
+    },
+    {
+        key: 'pix',
+        label: 'PIX visualizado',
+        shortLabel: 'PIX view',
+        source: 'page',
+        page: 'pix',
+        description: 'Tela de pagamento aberta'
+    },
+    {
+        key: 'pix_generated',
+        label: 'PIX gerado',
+        shortLabel: 'PIX gerado',
+        source: 'summary',
+        field: 'pix',
+        description: 'Transacao PIX criada'
+    },
+    {
+        key: 'pix_paid',
+        label: 'PIX pago',
+        shortLabel: 'PIX pago',
+        source: 'summary',
+        field: 'paid',
+        description: 'Pagamento confirmado'
+    },
+    {
+        key: 'upsell_iof',
+        label: 'Upsell IOF',
+        shortLabel: 'Upsell IOF',
+        source: 'page',
+        page: 'upsell-iof',
+        description: 'Primeira oferta de upsell'
+    },
+    {
+        key: 'upsell_correios',
+        label: 'Upsell Correios',
+        shortLabel: 'Upsell Correios',
+        source: 'page',
+        page: 'upsell-correios',
+        description: 'Segunda oferta de upsell'
+    },
+    {
+        key: 'upsell',
+        label: 'Upsell final',
+        shortLabel: 'Upsell final',
+        source: 'page',
+        page: 'upsell',
+        description: 'Terceira oferta de upsell'
+    }
+];
 
 function asObject(input) {
     if (!input) return {};
@@ -80,6 +187,57 @@ function asObject(input) {
         }
     }
     return {};
+}
+
+function firstQueryValue(value) {
+    if (Array.isArray(value)) return value[0];
+    return value;
+}
+
+function parseRangeDateToIso(value, { endOfDay = false } = {}) {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+
+    if (SIMPLE_DATE_RE.test(raw)) {
+        const suffix = endOfDay ? 'T23:59:59.999Z' : 'T00:00:00.000Z';
+        const date = new Date(`${raw}${suffix}`);
+        if (Number.isNaN(date.getTime())) return null;
+        return date.toISOString();
+    }
+
+    const date = new Date(raw);
+    if (Number.isNaN(date.getTime())) return null;
+    if (endOfDay) {
+        date.setUTCHours(23, 59, 59, 999);
+    } else {
+        date.setUTCHours(0, 0, 0, 0);
+    }
+    return date.toISOString();
+}
+
+function parseLeadsDateRange(query = {}) {
+    const rawFrom = firstQueryValue(pick(query.from, query.dateFrom, query.startDate));
+    const rawTo = firstQueryValue(pick(query.to, query.dateTo, query.endDate));
+
+    const fromIso = rawFrom ? parseRangeDateToIso(rawFrom, { endOfDay: false }) : null;
+    const toIso = rawTo ? parseRangeDateToIso(rawTo, { endOfDay: true }) : null;
+
+    if (rawFrom && !fromIso) {
+        return { ok: false, error: 'Filtro de data "from" invalido.' };
+    }
+    if (rawTo && !toIso) {
+        return { ok: false, error: 'Filtro de data "to" invalido.' };
+    }
+    if (fromIso && toIso && Date.parse(fromIso) > Date.parse(toIso)) {
+        return { ok: false, error: 'Periodo invalido: "from" maior que "to".' };
+    }
+
+    return {
+        ok: true,
+        fromIso,
+        toIso,
+        hasRange: Boolean(fromIso || toIso)
+    };
 }
 
 function toIsoDate(value) {
@@ -290,8 +448,209 @@ function gatewayConversionPercent(stats = {}) {
     return Math.round((paid / pix) * 100);
 }
 
+function normalizeFunnelPage(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]/g, '');
+}
+
+function oneDecimalPercent(numerator, denominator) {
+    const num = Number(numerator || 0);
+    const den = Number(denominator || 0);
+    if (!Number.isFinite(num) || !Number.isFinite(den) || den <= 0) {
+        return 0;
+    }
+    return Math.round((num / den) * 1000) / 10;
+}
+
+async function fetchPageviewCountsMap(range = {}) {
+    const map = new Map();
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return map;
+
+    const fromIso = range?.fromIso || null;
+    const toIso = range?.toIso || null;
+    const hasRange = Boolean(fromIso || toIso);
+
+    if (!hasRange) {
+        const response = await fetchFn(`${SUPABASE_URL}/rest/v1/pageview_counts?select=page,total`, {
+            headers: {
+                apikey: SUPABASE_SERVICE_KEY,
+                Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        }).catch(() => null);
+
+        if (!response?.ok) {
+            return map;
+        }
+
+        const rows = await response.json().catch(() => []);
+        if (!Array.isArray(rows)) return map;
+
+        rows.forEach((row) => {
+            const key = normalizeFunnelPage(row?.page);
+            if (!key) return;
+            const total = Number(row?.total || 0);
+            map.set(key, Number.isFinite(total) && total > 0 ? Math.round(total) : 0);
+        });
+
+        return map;
+    }
+
+    let offset = 0;
+    const pageSize = 5000;
+
+    while (true) {
+        const url = new URL(`${SUPABASE_URL}/rest/v1/lead_pageviews`);
+        url.searchParams.set('select', 'page');
+        url.searchParams.set('order', 'created_at.desc');
+        url.searchParams.set('limit', String(pageSize));
+        url.searchParams.set('offset', String(offset));
+        if (fromIso) url.searchParams.append('created_at', `gte.${fromIso}`);
+        if (toIso) url.searchParams.append('created_at', `lte.${toIso}`);
+
+        const response = await fetchFn(url.toString(), {
+            headers: {
+                apikey: SUPABASE_SERVICE_KEY,
+                Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        }).catch(() => null);
+
+        if (!response?.ok) break;
+        const rows = await response.json().catch(() => []);
+        if (!Array.isArray(rows) || rows.length === 0) break;
+
+        rows.forEach((row) => {
+            const key = normalizeFunnelPage(row?.page);
+            if (!key) return;
+            map.set(key, Number(map.get(key) || 0) + 1);
+        });
+
+        if (rows.length < pageSize) break;
+        offset += rows.length;
+    }
+
+    return map;
+}
+
+function buildNativeFunnel(summary = {}, pageCounts = new Map()) {
+    const stagesWithRaw = FUNNEL_OVERVIEW_STAGES.map((stage) => {
+        const raw = stage.source === 'page'
+            ? Number(pageCounts.get(normalizeFunnelPage(stage.page || stage.key)) || 0)
+            : Number(summary?.[stage.field] || 0);
+        const countRaw = Number.isFinite(raw) && raw > 0 ? Math.round(raw) : 0;
+        return { ...stage, countRaw };
+    });
+
+    const firstRaw = Number(stagesWithRaw[0]?.countRaw || 0);
+    const fallbackBase = Number(summary?.total || 0);
+    const largestRaw = stagesWithRaw.reduce((max, stage) => Math.max(max, Number(stage.countRaw || 0)), 0);
+    const base = firstRaw > 0 ? firstRaw : (fallbackBase > 0 ? Math.round(fallbackBase) : largestRaw);
+
+    let prevEffective = base;
+    const stages = stagesWithRaw.map((stage, index) => {
+        const countRaw = Number(stage.countRaw || 0);
+        const countEffective = index === 0 ? countRaw : Math.min(countRaw, prevEffective);
+        const directEntries = index === 0 ? 0 : Math.max(0, countRaw - prevEffective);
+        const dropCount = index === 0 ? 0 : Math.max(0, prevEffective - countEffective);
+        const pctFromBase = oneDecimalPercent(countEffective, base);
+        const pctFromPrev = index === 0 ? pctFromBase : oneDecimalPercent(countEffective, prevEffective);
+        const dropPct = index === 0 ? 0 : oneDecimalPercent(dropCount, prevEffective);
+
+        prevEffective = countEffective;
+
+        return {
+            key: stage.key,
+            label: stage.label,
+            shortLabel: stage.shortLabel || stage.label,
+            description: stage.description || '',
+            source: stage.source,
+            page: stage.page || null,
+            field: stage.field || null,
+            countRaw,
+            countEffective,
+            directEntries,
+            pctFromBase,
+            pctFromPrev,
+            dropCount,
+            dropPct
+        };
+    });
+
+    return {
+        base: Number(base || 0),
+        totalLeads: Number(summary?.total || 0),
+        generatedAt: new Date().toISOString(),
+        stages
+    };
+}
+
+function resolveTrackingText(...values) {
+    for (const raw of values) {
+        const value = String(raw || '').trim();
+        if (value) return value;
+    }
+    return '-';
+}
+
+function decodeTrackingValue(value = '') {
+    const raw = String(value || '').trim();
+    if (!raw || raw === '-') return '-';
+    try {
+        return decodeURIComponent(raw).replace(/\+/g, ' ').trim() || '-';
+    } catch (_error) {
+        return raw;
+    }
+}
+
+function sanitizeCampaignName(value = '') {
+    let text = decodeTrackingValue(value);
+    if (!text || text === '-') return '-';
+
+    text = text
+        .replace(/^\s*\d{6,}\s*[:|>\-_/]+\s*/i, '')
+        .replace(/^\s*(?:campaignid|campanhaid|id)\s*[:#-]?\s*\d{5,}\s*[-:|]\s*/i, '')
+        .replace(/\s*[\(\[\{]\s*(?:id[:\s-]*)?\d{5,}\s*[\)\]\}]\s*$/i, '')
+        .replace(/\s*(?:\||-|\/|:)\s*(?:id[:\s-]*)?\d{5,}\s*$/i, '')
+        .replace(/\s*__\s*(?:id[:\s-]*)?\d{5,}\s*$/i, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+    if (!text || /^\d{5,}$/.test(text)) return '-';
+    return text;
+}
+
+function sanitizeAdsetName(value = '') {
+    let text = prettifyTrafficLabel(value);
+    if (!text || text === '-') return '-';
+
+    text = text
+        .replace(/^\s*\d{6,}\s*[:|>\-_/]+\s*/i, '')
+        .replace(/^\s*(?:adsetid|adset_id|conjuntoid|conjunto_id|id)\s*[:#-]?\s*\d{5,}\s*[-:|]\s*/i, '')
+        .replace(/\s*[\(\[\{]\s*(?:id[:\s-]*)?\d{5,}\s*[\)\]\}]\s*$/i, '')
+        .replace(/\s*(?:\||-|\/|:)\s*(?:id[:\s-]*)?\d{5,}\s*$/i, '')
+        .replace(/\s*__\s*(?:id[:\s-]*)?\d{5,}\s*$/i, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+    if (!text || /^\d{5,}$/.test(text)) return '-';
+    return text;
+}
+
+function prettifyTrafficLabel(value = '') {
+    const text = decodeTrackingValue(value);
+    if (!text || text === '-') return '-';
+    return text
+        .replace(/[_|]+/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+}
+
 function mapLeadReadable(row) {
     const payload = asObject(row?.payload);
+    const payloadUtm = asObject(payload?.utm);
     const gateway = resolveLeadGateway(row, payload);
     const isPaid = isLeadPaid(row, payload);
     const isUpsell = Boolean(
@@ -315,6 +674,41 @@ function mapLeadReadable(row) {
                                 ? 'dados_pessoais'
                                 : 'inicio';
     const evento = isPaid ? 'pix_confirmed' : (row?.last_event || '-');
+    const utmSource = resolveTrackingText(
+        row?.utm_source,
+        payloadUtm?.utm_source,
+        payload?.utm_source,
+        payloadUtm?.src,
+        payload?.src
+    );
+    const utmCampaign = resolveTrackingText(
+        row?.utm_campaign,
+        payloadUtm?.utm_campaign,
+        payload?.utm_campaign,
+        payloadUtm?.campaign,
+        payload?.campaign,
+        payloadUtm?.sck
+    );
+    const utmTerm = resolveTrackingText(
+        row?.utm_term,
+        payloadUtm?.utm_term,
+        payload?.utm_term,
+        payloadUtm?.term,
+        payload?.term
+    );
+    const utmAdset = resolveTrackingText(
+        row?.utm_content,
+        payloadUtm?.utm_content,
+        payload?.utm_content,
+        payloadUtm?.content,
+        payload?.content,
+        payloadUtm?.utm_adset,
+        payload?.utm_adset,
+        payloadUtm?.adset,
+        payload?.adset,
+        payloadUtm?.adset_name,
+        payload?.adset_name
+    );
 
     return {
         session_id: row?.session_id || '',
@@ -337,8 +731,15 @@ function mapLeadReadable(row) {
         is_upsell: isUpsell,
         gateway,
         gateway_label: gatewayLabel(gateway),
-        utm_source: row?.utm_source || '-',
-        utm_campaign: row?.utm_campaign || '-',
+        utm_source: utmSource,
+        utm_source_label: prettifyTrafficLabel(utmSource),
+        utm_campaign: utmCampaign,
+        utm_campaign_name: sanitizeCampaignName(utmCampaign),
+        utm_term: utmTerm,
+        utm_term_label: prettifyTrafficLabel(utmTerm),
+        utm_adset: utmAdset,
+        utm_adset_label: sanitizeAdsetName(utmAdset),
+        utm_adset_name: sanitizeAdsetName(utmAdset),
         fbclid: row?.fbclid || '-',
         gclid: row?.gclid || '-',
         status_funil: statusFunil,
@@ -434,20 +835,30 @@ async function getLeads(req, res) {
         res.status(500).json({ error: 'Supabase nao configurado.' });
         return;
     }
+    const range = parseLeadsDateRange(req.query || {});
+    if (!range.ok) {
+        res.status(400).json({ error: range.error || 'Filtro de data invalido.' });
+        return;
+    }
 
     const url = new URL(`${SUPABASE_URL}/rest/v1/leads`);
     const limit = Math.min(Math.max(Number(req.query.limit) || 50, 1), 200);
     const offset = Math.max(Number(req.query.offset) || 0, 0);
     const query = String(req.query.q || '').trim();
 
-    url.searchParams.set('select', 'session_id,name,cpf,email,phone,stage,last_event,cep,address_line,number,neighborhood,city,state,shipping_name,shipping_price,bump_selected,bump_price,pix_txid,pix_amount,utm_source,utm_campaign,fbclid,gclid,payload,updated_at,created_at');
+    url.searchParams.set('select', 'session_id,name,cpf,email,phone,stage,last_event,cep,address_line,number,neighborhood,city,state,shipping_name,shipping_price,bump_selected,bump_price,pix_txid,pix_amount,utm_source,utm_campaign,utm_term,utm_content,fbclid,gclid,payload,updated_at,created_at');
     url.searchParams.set('order', 'updated_at.desc');
     url.searchParams.set('limit', String(limit));
     url.searchParams.set('offset', String(offset));
+    if (range.fromIso) url.searchParams.append('updated_at', `gte.${range.fromIso}`);
+    if (range.toIso) url.searchParams.append('updated_at', `lte.${range.toIso}`);
 
     if (query) {
         const ilike = `%${query.replace(/%/g, '')}%`;
-        url.searchParams.set('or', `name.ilike.${ilike},email.ilike.${ilike},phone.ilike.${ilike},cpf.ilike.${ilike}`);
+        url.searchParams.set(
+            'or',
+            `name.ilike.${ilike},email.ilike.${ilike},phone.ilike.${ilike},cpf.ilike.${ilike},utm_source.ilike.${ilike},utm_campaign.ilike.${ilike},utm_term.ilike.${ilike},utm_content.ilike.${ilike}`
+        );
     }
 
     const response = await fetchFn(url.toString(), {
@@ -527,7 +938,7 @@ async function getLeads(req, res) {
         }
     };
 
-    const maxSummaryRows = clamp(req.query.summaryMax || 20000, 1, 50000);
+    const maxSummaryRows = clamp(req.query.summaryMax || 50000, 1, 200000);
     const pageSize = 1000;
     let summaryOffset = 0;
     let done = false;
@@ -539,9 +950,14 @@ async function getLeads(req, res) {
         u.searchParams.set('order', 'updated_at.desc');
         u.searchParams.set('limit', String(take));
         u.searchParams.set('offset', String(summaryOffset));
+        if (range.fromIso) u.searchParams.append('updated_at', `gte.${range.fromIso}`);
+        if (range.toIso) u.searchParams.append('updated_at', `lte.${range.toIso}`);
         if (query) {
             const ilike = `%${query.replace(/%/g, '')}%`;
-            u.searchParams.set('or', `name.ilike.${ilike},email.ilike.${ilike},phone.ilike.${ilike},cpf.ilike.${ilike}`);
+            u.searchParams.set(
+                'or',
+                `name.ilike.${ilike},email.ilike.${ilike},phone.ilike.${ilike},cpf.ilike.${ilike},utm_source.ilike.${ilike},utm_campaign.ilike.${ilike},utm_term.ilike.${ilike},utm_content.ilike.${ilike}`
+            );
         }
 
         const r = await fetchFn(u.toString(), {
@@ -626,6 +1042,13 @@ async function getLeads(req, res) {
     summary.gatewayStats.ghostspay.conversion = gatewayConversionPercent(summary.gatewayStats.ghostspay);
     summary.gatewayStats.sunize.conversion = gatewayConversionPercent(summary.gatewayStats.sunize);
     summary.gatewayStats.paradise.conversion = gatewayConversionPercent(summary.gatewayStats.paradise);
+    summary.range = {
+        from: range.fromIso || null,
+        to: range.toIso || null,
+        timezone: 'UTC'
+    };
+    const pageCounts = await fetchPageviewCountsMap(range).catch(() => new Map());
+    summary.funnel = buildNativeFunnel(summary, pageCounts);
 
     res.status(200).json({ data, summary });
 }
@@ -776,30 +1199,30 @@ function normalizePushcutUrls(urls = []) {
         seen.add(url);
         out.push(url);
     }
-    return out.slice(0, 2);
+    return out.slice(0, 1);
 }
 
 function buildPushcutConfig(raw = {}) {
-    const createdUrls = normalizePushcutUrls([
+    const createdUrl = normalizePushcutUrls([
         ...(Array.isArray(raw.pixCreatedUrls) ? raw.pixCreatedUrls : []),
         raw.pixCreatedUrl,
         raw.pixCreatedUrl2
-    ]);
-    const confirmedUrls = normalizePushcutUrls([
+    ])[0] || '';
+    const confirmedUrl = normalizePushcutUrls([
         ...(Array.isArray(raw.pixConfirmedUrls) ? raw.pixConfirmedUrls : []),
         raw.pixConfirmedUrl,
         raw.pixConfirmedUrl2
-    ]);
+    ])[0] || '';
 
     return {
         ...defaultSettings.pushcut,
         ...raw,
-        pixCreatedUrl: createdUrls[0] || '',
-        pixCreatedUrl2: createdUrls[1] || '',
-        pixCreatedUrls: createdUrls,
-        pixConfirmedUrl: confirmedUrls[0] || '',
-        pixConfirmedUrl2: confirmedUrls[1] || '',
-        pixConfirmedUrls: confirmedUrls,
+        pixCreatedUrl: createdUrl,
+        pixCreatedUrl2: '',
+        pixCreatedUrls: createdUrl ? [createdUrl] : [],
+        pixConfirmedUrl: confirmedUrl,
+        pixConfirmedUrl2: '',
+        pixConfirmedUrls: confirmedUrl ? [confirmedUrl] : [],
         templates: {
             ...defaultSettings.pushcut.templates,
             ...(raw.templates || {})
@@ -1040,10 +1463,20 @@ async function pushcutTest(req, res) {
         amount: 56.1,
         name: 'Lead Teste',
         customerName: 'Lead Teste',
-        customerEmail: 'lead.teste@entregadoresifood.app',
+        customerEmail: 'lead.teste@ifoodbag.app',
         cep: '08717630',
+        source: 'Meta Ads',
+        utm_source: 'meta',
+        campaign: 'Campanha Teste',
+        utm_campaign: 'Campanha Teste',
+        adset: 'Conjunto Teste',
+        utm_content: 'Conjunto Teste',
+        utm: {
+            utm_source: 'meta',
+            utm_campaign: 'Campanha Teste',
+            utm_content: 'Conjunto Teste'
+        },
         shippingName: 'Envio Padrao iFood',
-        source: 'admin_test',
         created_at: new Date().toISOString()
     };
 
@@ -1486,6 +1919,30 @@ async function pixReconcile(req, res) {
                     customerEmail: leadData?.email || '',
                     cep: leadData?.cep || '',
                     shippingName: leadData?.shipping_name || '',
+                    utm: {
+                        utm_source: leadData?.utm_source || leadUtm?.utm_source || leadUtm?.src || '',
+                        utm_medium: leadData?.utm_medium || leadUtm?.utm_medium || '',
+                        utm_campaign: leadData?.utm_campaign || leadUtm?.utm_campaign || leadUtm?.campaign || leadUtm?.sck || '',
+                        utm_term: leadData?.utm_term || leadUtm?.utm_term || leadUtm?.term || '',
+                        utm_content: (
+                            leadData?.utm_content ||
+                            leadUtm?.utm_content ||
+                            leadUtm?.utm_adset ||
+                            leadUtm?.adset ||
+                            leadUtm?.content ||
+                            ''
+                        )
+                    },
+                    source: leadData?.utm_source || leadUtm?.utm_source || leadUtm?.src || '',
+                    campaign: leadData?.utm_campaign || leadUtm?.utm_campaign || leadUtm?.campaign || leadUtm?.sck || '',
+                    adset: (
+                        leadData?.utm_content ||
+                        leadUtm?.utm_content ||
+                        leadUtm?.utm_adset ||
+                        leadUtm?.adset ||
+                        leadUtm?.content ||
+                        ''
+                    ),
                     isUpsell
                 }
             }).catch(() => null);

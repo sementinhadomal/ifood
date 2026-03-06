@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -13,25 +12,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css?v=3.4" />
-  <script src="/backguard.js?v=1.5"></script>
+<script src="/backguard.js?v=1.5"></script>
 </head>
-
 <body data-page="admin" data-admin="overview">
   <div class="admin-shell">
     <aside class="admin-sidebar">
       <div class="admin-brand">
-        <img src="/assets/ifoodentregadores.png" alt="iFood" />
+        <img src="/assets/ifoodentregadores.webp" alt="iFood" />
         <div>
           <strong>Dashboard</strong>
           <span>Entregadores</span>
         </div>
       </div>
       <nav class="admin-nav">
-        <a class="admin-nav-item active" data-admin="overview" href="/admin">Visão geral</a>
+        <a class="admin-nav-item" data-admin="overview" href="/admin">Visao geral</a>
         <a class="admin-nav-item" data-admin="tracking" href="/admin/tracking">Tracking</a>
         <a class="admin-nav-item" data-admin="utmfy" href="/admin/utmfy">UTMfy</a>
         <a class="admin-nav-item" data-admin="gateways" href="/admin/gateways">Gateways</a>
-        <a class="admin-nav-item" data-admin="pages" href="/admin/pages">Páginas</a>
+        <a class="admin-nav-item" data-admin="pages" href="/admin/pages">Paginas</a>
         <a class="admin-nav-item" data-admin="backredirects" href="/admin/backredirects">Backredirects</a>
         <a class="admin-nav-item" data-admin="leads" href="/admin/leads">Leads</a>
       </nav>
@@ -44,8 +42,8 @@
     <main class="admin-main">
       <header class="admin-topbar">
         <div>
-          <h1>Visão geral</h1>
-          <p>Métricas de acesso e conversão do site em tempo real.</p>
+          <h1>Painel Administrativo</h1>
+          <p>Visao geral de performance, funil e status da operacao em tempo real.</p>
         </div>
         <div class="admin-topbar-actions">
           <button id="admin-save" class="btn-primary" type="button">Salvar configuracoes</button>
@@ -57,8 +55,7 @@
         <h2>Acesso restrito</h2>
         <p class="admin-muted">Digite sua senha para acessar o painel.</p>
         <div class="input-group">
-          <input type="password" id="admin-password" class="floating-input" placeholder=" "
-            autocomplete="current-password" />
+          <input type="password" id="admin-password" class="floating-input" placeholder=" " autocomplete="current-password" />
           <label for="admin-password" class="floating-label">Senha do admin</label>
         </div>
         <button id="admin-login-btn" class="btn-primary" type="button">Entrar</button>
@@ -88,6 +85,32 @@
               <strong id="metric-total">0</strong>
               <em>Total carregado</em>
             </div>
+          </div>
+
+          <div class="admin-range-toolbar">
+            <div class="input-group">
+              <select id="overview-range-preset" class="floating-input">
+                <option value="all">Todo periodo</option>
+                <option value="today">Hoje</option>
+                <option value="yesterday">Ontem</option>
+                <option value="last7">Ultimos 7 dias</option>
+                <option value="last30">Ultimos 30 dias</option>
+                <option value="thisMonth">Este mes</option>
+                <option value="custom">Personalizado</option>
+              </select>
+              <label for="overview-range-preset" class="floating-label">Periodo</label>
+            </div>
+            <div class="input-group">
+              <input type="date" id="overview-range-from" class="floating-input" placeholder=" " />
+              <label for="overview-range-from" class="floating-label">De</label>
+            </div>
+            <div class="input-group">
+              <input type="date" id="overview-range-to" class="floating-input" placeholder=" " />
+              <label for="overview-range-to" class="floating-label">Ate</label>
+            </div>
+            <button id="overview-range-apply" class="btn-secondary" type="button">Aplicar</button>
+            <button id="overview-range-reset" class="btn-secondary" type="button">Limpar</button>
+            <span id="overview-range-status" class="admin-muted"></span>
           </div>
 
           <div class="admin-kpi-grid">
@@ -139,6 +162,16 @@
               <div class="admin-funnel-bar"><i id="funnel-pix"></i></div>
               <strong id="funnel-pix-value">0%</strong>
             </div>
+          </div>
+
+          <div class="admin-native-funnel">
+            <div class="admin-native-funnel-head">
+              <h3>Funil de Conversao (Nativo)</h3>
+              <span id="native-funnel-base" class="admin-chip">Base: 0</span>
+            </div>
+            <p class="admin-hint">Sessoes unicas por etapa, consolidando pageviews + eventos de pagamento no proprio painel.</p>
+            <div id="native-funnel-empty" class="admin-muted">Aguardando dados do funil...</div>
+            <div id="native-funnel-track" class="admin-native-funnel-track" role="list"></div>
           </div>
         </section>
 
@@ -240,7 +273,12 @@
 
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-  <script src="/script.js?v=8.2" defer></script>
+  <script src="/script.js?v=8.3" defer></script>
 </body>
-
 </html>
+
+
+
+
+
+
