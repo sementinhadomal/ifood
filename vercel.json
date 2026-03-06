@@ -1,0 +1,55 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/**/*.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "*.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "*.css",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "*.js",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "assets/**/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "images/**/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "src/**/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "js/**/*",
+            "use": "@vercel/static"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/api/admin/:path*",
+            "destination": "/api/admin?path=:path*"
+        }
+    ],
+    "cleanUrls": true,
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+                }
+            ]
+        }
+    ]
+}
