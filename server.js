@@ -529,8 +529,27 @@ app.get('/api/admin/leads', async (req, res) => {
 
     const SUPABASE_URL = process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL || '';
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE || '';
+
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-        res.status(500).json({ error: 'Supabase nao configurado.' });
+        try {
+            const leadsFile = path.join(process.cwd(), 'data', 'leads.json');
+            let data = [];
+            if (fs.existsSync(leadsFile)) {
+                data = JSON.parse(fs.readFileSync(leadsFile, 'utf8') || '[]');
+            }
+            res.json({
+                data: data.map(l => ({
+                    session_id: l.session_id,
+                    nome: l.name || '-',
+                    email: l.email || '-',
+                    telefone: l.phone || '-',
+                    cpf: l.cpf || '-',
+                    updated_at: l.updated_at
+                }))
+            });
+        } catch (error) {
+            res.status(500).json({ error: 'Falha ao buscar leads locais.' });
+        }
         return;
     }
 
@@ -576,7 +595,19 @@ app.get('/api/admin/pages', async (req, res) => {
     const SUPABASE_URL = process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL || '';
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE || '';
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-        res.status(500).json({ error: 'Supabase nao configurado.' });
+        try {
+            const pageviewsFile = path.join(process.cwd(), 'data', 'pageviews.json');
+            let data = [];
+            if (fs.existsSync(pageviewsFile)) {
+                const views = JSON.parse(fs.readFileSync(pageviewsFile, 'utf8') || '[]');
+                const counts = {};
+                views.forEach(v => counts[v.page] = (counts[v.page] || 0) + 1);
+                data = Object.entries(counts).map(([page, total]) => ({ page, total }));
+            }
+            res.json({ data });
+        } catch (error) {
+            res.status(500).json({ error: 'Falha ao buscar paginas locais.' });
+        }
         return;
     }
 
@@ -598,11 +629,6 @@ app.get('/api/admin/pages', async (req, res) => {
     res.json({ data });
 });
 
-app.post('/api/pix/status', (req, res) => {
-    const handler = require('./api/pix/status');
-    return handler(req, res);
-});
-
 app.get('/api/admin/backredirects', async (req, res) => {
     if (!ensureAllowedRequest(req, res, { requireSession: false })) {
         return;
@@ -612,7 +638,7 @@ app.get('/api/admin/backredirects', async (req, res) => {
     const SUPABASE_URL = process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL || '';
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE || '';
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-        res.status(500).json({ error: 'Supabase nao configurado.' });
+        res.status(200).json({ data: [], summary: { totalBack: 0, totalViews: 0, avgRate: 0 } });
         return;
     }
 

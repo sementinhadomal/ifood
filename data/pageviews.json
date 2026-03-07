@@ -1,0 +1,47 @@
+[
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "home",
+    "created_at": "2026-03-07T01:58:02.988Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "quiz",
+    "created_at": "2026-03-07T01:58:35.961Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "personal",
+    "created_at": "2026-03-07T01:59:22.316Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "cep",
+    "created_at": "2026-03-07T01:59:58.170Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "processing",
+    "created_at": "2026-03-07T02:00:31.139Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "success",
+    "created_at": "2026-03-07T02:00:55.109Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "checkout",
+    "created_at": "2026-03-07T02:01:20.962Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "orderbump",
+    "created_at": "2026-03-07T02:01:32.295Z"
+  },
+  {
+    "session_id": "mmfobykw-273rfqrk",
+    "page": "pix",
+    "created_at": "2026-03-07T02:01:53.910Z"
+  }
+]

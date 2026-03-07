@@ -61,6 +61,9 @@ const fetchFn = global.fetch
     ? global.fetch.bind(global)
     : (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
+const fs = require('fs');
+const path = require('path');
+
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL || '';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE || '';
 
@@ -979,7 +982,7 @@ async function getLeads(req, res) {
                     ? 'sunize'
                     : mapped.gateway === 'paradise'
                         ? 'paradise'
-                    : 'ativushub';
+                        : 'ativushub';
             const gatewaySummary = summary.gatewayStats[gateway];
             summary.total += 1;
             gatewaySummary.leads += 1;
@@ -1561,7 +1564,7 @@ async function pixReconcile(req, res) {
                 ? 'sunize'
                 : rowGateway === 'paradise'
                     ? 'paradise'
-                : 'ativushub';
+                    : 'ativushub';
         checked += 1;
         gatewaySummary[gateway].checked += 1;
         try {
