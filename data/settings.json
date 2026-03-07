@@ -11,9 +11,9 @@
     }
   },
   "utmfy": {
-    "enabled": false,
+    "enabled": true,
     "endpoint": "https://api.utmify.com.br/api-credentials/orders",
-    "apiKey": "",
+    "apiKey": "Ww0pFiTuRIC1AQcRt6PGmdgEO5jHlhVWcp4J",
     "platform": "IfoodBag"
   },
   "pushcut": {
