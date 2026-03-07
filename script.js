@@ -590,17 +590,17 @@ function setupGlobalBackRedirect(page) {
                                 })
                                 : null
                         ) || (
-                            pix
-                                ? applyCouponToShipping({
-                                    id: String(pix?.shippingId || 'padrao'),
-                                    name: String(pix?.shippingName || 'Envio Padrão iFood'),
-                                    eta: '',
-                                    price: fallbackShippingBase,
-                                    basePrice: fallbackShippingBase,
-                                    originalPrice: fallbackShippingBase
-                                })
-                                : null
-                        );
+                                pix
+                                    ? applyCouponToShipping({
+                                        id: String(pix?.shippingId || 'padrao'),
+                                        name: String(pix?.shippingName || 'Envio Padrão iFood'),
+                                        eta: '',
+                                        price: fallbackShippingBase,
+                                        basePrice: fallbackShippingBase,
+                                        originalPrice: fallbackShippingBase
+                                    })
+                                    : null
+                            );
 
                         if (shippingForRegeneration) {
                             btnApply.disabled = true;
@@ -4256,7 +4256,7 @@ function initAdmin() {
     const saveOverviewRange = () => {
         try {
             localStorage.setItem(OVERVIEW_RANGE_STORAGE_KEY, JSON.stringify(overviewRange));
-        } catch (_error) {}
+        } catch (_error) { }
     };
 
     const loadOverviewRange = () => {
@@ -4384,39 +4384,39 @@ function initAdmin() {
                 }
             };
         } else {
-        if (reset) {
-            metrics.total = 0;
-            metrics.pix = 0;
-            metrics.frete = 0;
-            metrics.cep = 0;
-            metrics.paid = 0;
-            metrics.lastUpdated = '';
-            metrics.funnel = null;
-            metrics.gatewayStats = emptyGatewayStats();
-        }
+            if (reset) {
+                metrics.total = 0;
+                metrics.pix = 0;
+                metrics.frete = 0;
+                metrics.cep = 0;
+                metrics.paid = 0;
+                metrics.lastUpdated = '';
+                metrics.funnel = null;
+                metrics.gatewayStats = emptyGatewayStats();
+            }
 
-        metrics.total += rows.length;
-        rows.forEach((row) => {
-            const cep = String(row.cep || '').trim();
-            const frete = String(row.frete || '').trim();
-            const pixTxid = String(row.pix_txid || '').trim();
-            const ev = String(row.evento || '').toLowerCase().trim();
-            const gateway = normalizeGatewayKey(row.gateway || 'ativushub');
-            const gatewayStats = metrics.gatewayStats[gateway];
+            metrics.total += rows.length;
+            rows.forEach((row) => {
+                const cep = String(row.cep || '').trim();
+                const frete = String(row.frete || '').trim();
+                const pixTxid = String(row.pix_txid || '').trim();
+                const ev = String(row.evento || '').toLowerCase().trim();
+                const gateway = normalizeGatewayKey(row.gateway || 'ativushub');
+                const gatewayStats = metrics.gatewayStats[gateway];
 
-            gatewayStats.leads += 1;
-            if (pixTxid && pixTxid !== '-') metrics.pix += 1;
-            if (pixTxid && pixTxid !== '-') gatewayStats.pix += 1;
-            if (frete && frete !== '-') metrics.frete += 1;
-            if (cep && cep !== '-') metrics.cep += 1;
-            const isPaid = row.is_paid === true || ev === 'pix_confirmed' || ev === 'pagamento_confirmado' || ev === 'paid';
-            if (isPaid) metrics.paid += 1;
-            if (isPaid) gatewayStats.paid += 1;
-            else if (ev === 'pix_refunded') gatewayStats.refunded += 1;
-            else if (ev === 'pix_refused' || ev === 'pix_failed') gatewayStats.refused += 1;
-            else if (ev === 'pix_pending' || ev === 'pix_created') gatewayStats.pending += 1;
-            if (!metrics.lastUpdated && (row.event_time || row.updated_at)) metrics.lastUpdated = row.event_time || row.updated_at;
-        });
+                gatewayStats.leads += 1;
+                if (pixTxid && pixTxid !== '-') metrics.pix += 1;
+                if (pixTxid && pixTxid !== '-') gatewayStats.pix += 1;
+                if (frete && frete !== '-') metrics.frete += 1;
+                if (cep && cep !== '-') metrics.cep += 1;
+                const isPaid = row.is_paid === true || ev === 'pix_confirmed' || ev === 'pagamento_confirmado' || ev === 'paid';
+                if (isPaid) metrics.paid += 1;
+                if (isPaid) gatewayStats.paid += 1;
+                else if (ev === 'pix_refunded') gatewayStats.refunded += 1;
+                else if (ev === 'pix_refused' || ev === 'pix_failed') gatewayStats.refused += 1;
+                else if (ev === 'pix_pending' || ev === 'pix_created') gatewayStats.pending += 1;
+                if (!metrics.lastUpdated && (row.event_time || row.updated_at)) metrics.lastUpdated = row.event_time || row.updated_at;
+            });
         }
 
         if (metricTotal) metricTotal.textContent = String(metrics.total);
@@ -5595,7 +5595,7 @@ async function ensureSiteConfig(force = false) {
                 state.pixelConfig = JSON.parse(cached);
                 return { pixel: state.pixelConfig };
             }
-        } catch (_e) {}
+        } catch (_e) { }
         return null;
     }
 }
@@ -5621,14 +5621,16 @@ function loadFacebookPixel(pixelId) {
 
     /* eslint-disable */
     if (!window.fbq) {
-        !function(f,b,e,v,n,t,s){
-            if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)
-        }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     }
     /* eslint-enable */
 
@@ -5638,7 +5640,21 @@ function loadFacebookPixel(pixelId) {
         window.fbq('set', 'autoConfig', false, id);
         window.fbq('init', id);
         window.__ifoodPixelInits[id] = true;
-    } catch (_error) {}
+    } catch (_error) { }
+}
+
+function loadUtmifyPixel(pixelId) {
+    const id = String(pixelId || '').trim();
+    if (!id) return;
+    if (window.__ifoodUtmifyInit === id) return;
+    window.__ifoodUtmifyInit = id;
+
+    window.pixelId = id;
+    const script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.src = 'https://cdn.utmify.com.br/scripts/pixel/pixel.js';
+    document.head.appendChild(script);
 }
 
 function getCookieValue(name) {
@@ -5715,7 +5731,7 @@ function savePixelEventDedupe(map = {}) {
             compact[key] = Number(value || 0) || Date.now();
         });
         sessionStorage.setItem(STORAGE_KEYS.pixelEventDedupe, JSON.stringify(compact));
-    } catch (_error) {}
+    } catch (_error) { }
 }
 
 function hasSentPixelEvent(eventName = '', eventId = '') {
@@ -5739,7 +5755,11 @@ async function initMarketing() {
         return;
     }
 
-    loadFacebookPixel(pixel.id);
+    if (pixel.id.length > 15) {
+        loadUtmifyPixel(pixel.id);
+    } else {
+        loadFacebookPixel(pixel.id);
+    }
     const page = String(document.body?.dataset?.page || '').trim();
 
     if (pixel.events?.page_view !== false) {
@@ -5799,7 +5819,7 @@ function firePixelEvent(eventName, data = {}, options = {}) {
                 window.fbq('track', eventName, data);
             }
             sent = true;
-        } catch (_error2) {}
+        } catch (_error2) { }
     }
     if (sent && shouldDedupe) {
         markPixelEventSent(eventName, eventId);

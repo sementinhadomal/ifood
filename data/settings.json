@@ -1,7 +1,7 @@
 {
   "pixel": {
-    "enabled": false,
-    "id": "",
+    "enabled": true,
+    "id": "697185be2058fdd08c7d7436",
     "events": {
       "page_view": true,
       "quiz_view": true,

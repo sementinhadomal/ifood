@@ -2,6 +2,19 @@
     const pixelId = String(window.pixelId || '').trim();
     if (!pixelId) return;
 
+    // UTMify Check: If it looks like a UTMify ID (usually long hex)
+    if (pixelId.length > 20) {
+        if (window.__ifoodUtmifyInit === pixelId) return;
+        window.__ifoodUtmifyInit = pixelId;
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://cdn.utmify.com.br/scripts/pixel/pixel.js';
+        document.head.appendChild(script);
+        return;
+    }
+
     if (!window.__ifbLegacyPixelInits || typeof window.__ifbLegacyPixelInits !== 'object') {
         window.__ifbLegacyPixelInits = {};
     }
@@ -13,7 +26,7 @@
             window.fbq('set', 'autoConfig', false, pixelId);
             window.fbq('init', pixelId);
             window.__ifbLegacyPixelInits[pixelId] = true;
-        } catch (_error) {}
+        } catch (_error) { }
     };
 
     if (typeof window.fbq === 'function') {
@@ -21,9 +34,9 @@
         return;
     }
 
-    !function(f, b, e, v, n, t, s) {
+    !function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
-        n = f.fbq = function() {
+        n = f.fbq = function () {
             n.callMethod
                 ? n.callMethod.apply(n, arguments)
                 : n.queue.push(arguments);
