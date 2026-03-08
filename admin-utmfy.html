@@ -85,6 +85,10 @@
               <input type="text" id="pixel-utmfy-id" class="floating-input" placeholder=" " />
               <label for="pixel-utmfy-id" class="floating-label">UTMfy Pixel ID (Browser-side)</label>
             </div>
+            <div class="input-group">
+              <input type="password" id="utmfy-api" class="floating-input" placeholder=" " />
+              <label for="utmfy-api" class="floating-label">Token (opcional)</label>
+            </div>
           </div>
         </section>
 
@@ -181,7 +185,8 @@
             <span class="pushcut-placeholders__item"><code>{adset}</code></span>
           </div>
           <p class="admin-hint">Placeholders disponiveis tambem em alias: <code>{campaignName}</code> e
-            <code>{adsetName}</code>.</p>
+            <code>{adsetName}</code>.
+          </p>
           <div class="admin-inline-actions">
             <button id="admin-test-pushcut" class="btn-secondary" type="button">Testar Pushcut</button>
             <span id="admin-test-pushcut-status" class="admin-muted"></span>
