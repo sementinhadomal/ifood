@@ -3,17 +3,21 @@
     if (!pixelId) return;
 
     // UTMify Check: If it looks like a UTMify ID (usually long hex)
-    if (pixelId.length > 20) {
-        if (window.__ifoodUtmifyInit === pixelId) return;
-        window.__ifoodUtmifyInit = pixelId;
-
-        const script = document.createElement('script');
-        script.async = true;
-        script.defer = true;
-        script.src = 'https://cdn.utmify.com.br/scripts/pixel/pixel.js';
-        document.head.appendChild(script);
-        return;
+    if (pixelId.length > 20 || window.utmfyId) {
+        const uId = window.utmfyId || pixelId;
+        if (window.__ifoodUtmifyInit !== uId) {
+            window.__ifoodUtmifyInit = uId;
+            const script = document.createElement('script');
+            script.async = true;
+            script.defer = true;
+            script.src = 'https://cdn.utmify.com.br/scripts/pixel/pixel.js';
+            document.head.appendChild(script);
+        }
     }
+
+    // Facebook Pixel Check (if pixelId is a Meta ID)
+    const isMetaId = pixelId.length > 0 && pixelId.length <= 16;
+    if (!isMetaId) return;
 
     if (!window.__ifbLegacyPixelInits || typeof window.__ifbLegacyPixelInits !== 'object') {
         window.__ifbLegacyPixelInits = {};

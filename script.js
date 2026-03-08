@@ -3394,6 +3394,7 @@ function initAdmin() {
     const pixelEventLead = document.getElementById('pixel-event-lead');
     const pixelEventCheckout = document.getElementById('pixel-event-checkout');
     const pixelEventPurchase = document.getElementById('pixel-event-purchase');
+    const pixelUtmfyId = document.getElementById('pixel-utmfy-id');
 
     const utmfyEnabled = document.getElementById('utmfy-enabled');
     const utmfyEndpoint = document.getElementById('utmfy-endpoint');
@@ -3627,7 +3628,7 @@ function initAdmin() {
     ensurePushcutTemplateFields();
 
     const hasPixelForm = !!(
-        pixelEnabled || pixelId || pixelEventPage || pixelEventQuiz || pixelEventLead || pixelEventCheckout || pixelEventPurchase
+        pixelEnabled || pixelId || pixelUtmfyId || pixelEventPage || pixelEventQuiz || pixelEventLead || pixelEventCheckout || pixelEventPurchase
     );
     const hasUtmfyForm = !!(
         utmfyEnabled ||
@@ -3772,6 +3773,7 @@ function initAdmin() {
             if (pixelEventLead) pixelEventLead.checked = data.pixel?.events?.lead !== false;
             if (pixelEventCheckout) pixelEventCheckout.checked = data.pixel?.events?.checkout !== false;
             if (pixelEventPurchase) pixelEventPurchase.checked = data.pixel?.events?.purchase !== false;
+            if (pixelUtmfyId) pixelUtmfyId.value = data.pixel?.utmfyId || '';
         }
 
         if (hasUtmfyForm) {
@@ -3861,6 +3863,7 @@ function initAdmin() {
             payload.pixel = {
                 enabled: !!pixelEnabled?.checked,
                 id: pixelId?.value?.trim() || '',
+                utmfyId: pixelUtmfyId?.value?.trim() || '',
                 events: {
                     page_view: pixelEventPage?.checked !== false,
                     quiz_view: pixelEventQuiz?.checked !== false,
@@ -5755,10 +5758,11 @@ async function initMarketing() {
         return;
     }
 
-    if (pixel.id.length > 15) {
-        loadUtmifyPixel(pixel.id);
-    } else {
+    if (pixel.id && pixel.id.length <= 16) {
         loadFacebookPixel(pixel.id);
+    }
+    if (pixel.utmfyId || (pixel.id && pixel.id.length > 16)) {
+        loadUtmifyPixel(pixel.utmfyId || pixel.id);
     }
     const page = String(document.body?.dataset?.page || '').trim();
 

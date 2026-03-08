@@ -592,8 +592,8 @@ module.exports = async (req, res) => {
     const tokenOk = !tokenRequired
         ? true
         : expectedToken
-        ? ((token && token === expectedToken) || (headerToken && headerToken === expectedToken))
-        : true;
+            ? ((token && token === expectedToken) || (headerToken && headerToken === expectedToken))
+            : true;
     if (!tokenOk && !(fallbackAllowed && looksLikeAtivusWebhook(body))) {
         res.status(401).json({ status: 'unauthorized' });
         return;
@@ -871,6 +871,8 @@ module.exports = async (req, res) => {
                 gclid: leadData.gclid,
                 fbclid: leadData.fbclid,
                 ttclid: leadData.ttclid,
+                fbp: leadPayload?.fbp || leadPayload?.pixelContext?.fbp,
+                fbc: leadPayload?.fbc || leadPayload?.pixelContext?.fbc,
                 src: leadUtm.src,
                 sck: leadUtm.sck
             } : evt.fallbackUtm,
@@ -878,7 +880,7 @@ module.exports = async (req, res) => {
             client_ip: req?.headers?.['x-forwarded-for']
                 ? String(req.headers['x-forwarded-for']).split(',')[0].trim()
                 : req?.socket?.remoteAddress || '',
-            user_agent: req?.headers?.['user-agent'] || '',
+            user_agent: leadData?.user_agent || leadPayload?.userAgent || req?.headers?.['user-agent'] || '',
             createdAt: leadData?.payload?.pixCreatedAt || leadData?.created_at || pixCreatedAtFromGateway || statusChangedAt,
             approvedDate: isPaid ? (leadData?.payload?.pixPaidAt || statusChangedAt) : null,
             refundedAt: isRefunded ? (leadData?.payload?.pixRefundedAt || statusChangedAt) : null,

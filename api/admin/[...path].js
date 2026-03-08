@@ -331,6 +331,7 @@ function sanitizeSettingsForAdmin(settingsData = {}) {
     payload.pixel = {
         enabled: !!safePixel.enabled,
         id: String(safePixel.id || '').trim(),
+        utmfyId: String(safePixel.utmfyId || '').trim(),
         events: {
             ...defaultSettings.pixel.events,
             ...asObject(safePixel.events)
@@ -1327,6 +1328,7 @@ async function settings(req, res) {
             pixel: {
                 enabled: !!bodyPixel.enabled,
                 id: String(bodyPixel.id || '').trim(),
+                utmfyId: String(bodyPixel.utmfyId || '').trim(),
                 events: {
                     ...defaultSettings.pixel.events,
                     ...(bodyPixel?.events || {})
