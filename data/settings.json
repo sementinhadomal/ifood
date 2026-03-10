@@ -33,9 +33,9 @@
     }
   },
   "payments": {
-    "activeGateway": "ativushub",
+    "activeGateway": "paradise",
     "ativushub": {
-      "enabled": true,
+      "enabled": false,
       "baseUrl": "https://api.ativushub.com.br",
       "apiKeyBase64": "NTI0Yjc1MTA5ZTA0M2JhYWIzN2RiYTE0ZTYyMWFmODRkMDUxZWNmYzQ0OWZjNzc3YmJiMzAyYTEyY2FhNWM3OQ==",
       "apiKey": "524b75109e043baab37dba14e621af84d051ecfc449fc777bbb302a12caa5c79",
@@ -68,13 +68,13 @@
       "timeoutMs": 12000
     },
     "paradise": {
-      "enabled": false,
+      "enabled": true,
       "baseUrl": "https://multi.paradisepags.com",
-      "apiKey": "",
+      "apiKey": "sk_ded4cd543d2e271b060757359cd00f2b6acd8b3c57cd5b7234bad09b4399dfa3",
       "productHash": "",
       "source": "api_externa",
       "orderbumpHash": "",
-      "description": "",
+      "description": "Pedido iFood Bag",
       "postbackUrl": "",
       "webhookToken": "",
       "webhookTokenRequired": false,

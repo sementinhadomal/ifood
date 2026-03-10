@@ -195,16 +195,32 @@ function extractPixFieldsForStatus(gateway, payload = {}) {
         paymentCode = pickText(
             root.qr_code,
             root.pix_code,
+            root.paymentCode,
+            root.payment_code,
+            root.copy_paste,
+            root.copyPaste,
+            root.pix,
+            root.pixCode,
             nested.qr_code,
-            nested.pix_code
+            nested.pix_code,
+            nested.paymentCode,
+            nested.payment_code,
+            nested.copy_paste,
+            nested.copyPaste,
+            nested.pix,
+            nested.pixCode
         );
         qrRaw = pickText(
             root.qr_code_base64,
             root.qrcode_base64,
             root.qrCodeBase64,
+            root.qrcode,
+            root.qrCode,
             nested.qr_code_base64,
             nested.qrcode_base64,
-            nested.qrCodeBase64
+            nested.qrCodeBase64,
+            nested.qrcode,
+            nested.qrCode
         );
     } else {
         paymentCode = pickText(root.paymentCode, root.paymentcode, nested.paymentCode, nested.paymentcode);

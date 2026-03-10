@@ -1746,7 +1746,7 @@ function initCheckout() {
         if (summaryCep) summaryCep.textContent = formatCep(rawCep);
         if (freightLoading) setHidden(freightLoading, false);
 
-        fetch(`https://brasilapi.com.br/api/cep/v1/${rawCep}`)
+        fetch(`https://brasilapi.com.br/api/cep/v1/${rawCep}`, { cache: 'no-store' })
             .then((res) => {
                 if (!res.ok) throw new Error('CEP não encontrado');
                 return res.json();
@@ -2001,7 +2001,7 @@ function initCheckout() {
         const startTime = Date.now();
         const minDelay = 900;
 
-        fetch(`https://brasilapi.com.br/api/cep/v1/${rawCep}`)
+        fetch(`https://brasilapi.com.br/api/cep/v1/${rawCep}`, { cache: 'no-store' })
             .then((res) => {
                 if (!res.ok) throw new Error('CEP não encontrado');
                 return res.json();
@@ -3065,6 +3065,7 @@ function initPix() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
+                cache: 'no-store',
                 body: JSON.stringify({
                     txid: pix.idTransaction,
                     sessionId: getLeadSessionId(),
@@ -3170,6 +3171,19 @@ function initPix() {
         .finally(() => {
             pollPixStatus();
             statusPollTimer = setInterval(pollPixStatus, pollIntervalMs);
+
+            // If we loaded without payment details but have a txid,
+            // try to hydrate immediately and more frequently for the first few seconds.
+            if (pix?.idTransaction && (!pix.paymentCode && !pix.paymentQrUrl && !pix.paymentCodeBase64)) {
+                let hydrationAttempts = 0;
+                const hydrationTimer = setInterval(async () => {
+                    hydrationAttempts++;
+                    await pollPixStatus();
+                    if (hydrationAttempts >= 5 || (pix.paymentCode || pix.paymentQrUrl || pix.paymentCodeBase64)) {
+                        clearInterval(hydrationTimer);
+                    }
+                }, 1200);
+            }
         });
     window.addEventListener('pagehide', clearStatusPolling, { once: true });
     window.addEventListener('beforeunload', clearStatusPolling, { once: true });
@@ -3749,6 +3763,7 @@ function initAdmin() {
         const res = await fetch(url, {
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
             ...options
         });
         return res;
@@ -5280,6 +5295,7 @@ async function postPixCreateWithSessionRetry(payload) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
+            cache: 'no-store',
             body: JSON.stringify(payload)
         });
         const body = await response.json().catch(() => ({}));
@@ -5448,7 +5464,12 @@ async function createPixCharge(shipping, bumpPrice, options = {}) {
             pix: pixPayload,
             amount
         });
-        redirect('pix.html');
+
+        // Small delay to ensure localStorage/sessionStorage is persisted 
+        // before Safari navigates away, which can sometimes drop pending writes.
+        setTimeout(() => {
+            redirect('pix.html');
+        }, 150);
     })();
 
     state.pixCreatePromise = run;

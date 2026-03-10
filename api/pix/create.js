@@ -330,16 +330,35 @@ function resolveParadiseResponse(data = {}) {
     const paymentCode = pickText(
         root.qr_code,
         root.pix_code,
+        root.paymentCode,
+        root.payment_code,
+        root.copy_paste,
+        root.copyPaste,
+        root.pix,
+        root.pixCode,
         nested.qr_code,
-        nested.pix_code
+        nested.pix_code,
+        nested.paymentCode,
+        nested.payment_code,
+        nested.copy_paste,
+        nested.copyPaste,
+        nested.pix,
+        nested.pixCode
     );
+    if (!paymentCode) {
+        console.log('[DEBUG] Paradise resolve - No paymentCode found in:', JSON.stringify(data));
+    }
     const qrRaw = pickText(
         root.qr_code_base64,
         root.qrcode_base64,
         root.qrCodeBase64,
+        root.qrcode,
+        root.qrCode,
         nested.qr_code_base64,
         nested.qrcode_base64,
-        nested.qrCodeBase64
+        nested.qrCodeBase64,
+        nested.qrcode,
+        nested.qrCode
     );
     let paymentCodeBase64 = '';
     let paymentQrUrl = '';
@@ -699,7 +718,10 @@ async function findReusablePixBySession({
 }
 
 module.exports = async (req, res) => {
-    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Surrogate-Control', 'no-store');
 
     if (req.method !== 'POST') {
         res.status(405).json({ error: 'Method not allowed' });
@@ -871,53 +893,53 @@ module.exports = async (req, res) => {
                     return res.status(500).json({ error: 'Credenciais GhostsPay nao configuradas.' });
                 }
 
-            const ghostItems = items.map((item) => ({
-                title: item.title,
-                quantity: Number(item.quantity || 1),
-                unitPrice: Math.max(1, Math.round(Number(item.unitPrice || 0) * 100))
-            }));
-            const ghostPayload = {
-                customer: {
-                    name,
-                    email,
-                    phone,
-                    document: {
-                        number: cpf,
-                        type: 'CPF'
+                const ghostItems = items.map((item) => ({
+                    title: item.title,
+                    quantity: Number(item.quantity || 1),
+                    unitPrice: Math.max(1, Math.round(Number(item.unitPrice || 0) * 100))
+                }));
+                const ghostPayload = {
+                    customer: {
+                        name,
+                        email,
+                        phone,
+                        document: {
+                            number: cpf,
+                            type: 'CPF'
+                        }
+                    },
+                    paymentMethod: 'PIX',
+                    amount: Math.max(1, Math.round(totalAmount * 100)),
+                    items: ghostItems,
+                    pix: {
+                        expiresInDays: 2
+                    },
+                    postbackUrl: resolveGhostspayPostbackUrl(req, gatewayConfig),
+                    ip: extractIp(req),
+                    description: upsellEnabled ? 'Pedido iFood Bag - Upsell' : 'Pedido iFood Bag',
+                    metadata: {
+                        gateway: 'ghostspay',
+                        orderId,
+                        shippingId: normalizedShipping?.id || '',
+                        shippingName: normalizedShipping?.name || '',
+                        cep: zipCode,
+                        reference: extra?.reference || '',
+                        bumpSelected: normalizedBump.selected,
+                        bumpPrice: normalizedBump.price,
+                        upsellEnabled,
+                        upsellKind: upsellEnabled ? String(upsell?.kind || 'frete_1dia') : '',
+                        upsellTitle: upsellEnabled ? String(upsell?.title || 'Prioridade de envio') : '',
+                        upsellPrice: upsellEnabled ? Number(upsell?.price || 0) : 0,
+                        previousTxid: upsellEnabled ? String(upsell?.previousTxid || '') : '',
+                        utm_source: rawBody?.utm?.utm_source || '',
+                        utm_medium: rawBody?.utm?.utm_medium || '',
+                        utm_campaign: rawBody?.utm?.utm_campaign || '',
+                        utm_term: rawBody?.utm?.utm_term || '',
+                        utm_content: rawBody?.utm?.utm_content || '',
+                        src: rawBody?.utm?.src || '',
+                        sck: rawBody?.utm?.sck || ''
                     }
-                },
-                paymentMethod: 'PIX',
-                amount: Math.max(1, Math.round(totalAmount * 100)),
-                items: ghostItems,
-                pix: {
-                    expiresInDays: 2
-                },
-                postbackUrl: resolveGhostspayPostbackUrl(req, gatewayConfig),
-                ip: extractIp(req),
-                description: upsellEnabled ? 'Pedido iFood Bag - Upsell' : 'Pedido iFood Bag',
-                metadata: {
-                    gateway: 'ghostspay',
-                    orderId,
-                    shippingId: normalizedShipping?.id || '',
-                    shippingName: normalizedShipping?.name || '',
-                    cep: zipCode,
-                    reference: extra?.reference || '',
-                    bumpSelected: normalizedBump.selected,
-                    bumpPrice: normalizedBump.price,
-                    upsellEnabled,
-                    upsellKind: upsellEnabled ? String(upsell?.kind || 'frete_1dia') : '',
-                    upsellTitle: upsellEnabled ? String(upsell?.title || 'Prioridade de envio') : '',
-                    upsellPrice: upsellEnabled ? Number(upsell?.price || 0) : 0,
-                    previousTxid: upsellEnabled ? String(upsell?.previousTxid || '') : '',
-                    utm_source: rawBody?.utm?.utm_source || '',
-                    utm_medium: rawBody?.utm?.utm_medium || '',
-                    utm_campaign: rawBody?.utm?.utm_campaign || '',
-                    utm_term: rawBody?.utm?.utm_term || '',
-                    utm_content: rawBody?.utm?.utm_content || '',
-                    src: rawBody?.utm?.src || '',
-                    sck: rawBody?.utm?.sck || ''
-                }
-            };
+                };
 
                 ({ response, data } = await requestGhostspayCreate(gatewayConfig, ghostPayload));
                 if (!response?.ok) {
@@ -1168,58 +1190,58 @@ module.exports = async (req, res) => {
                     return res.status(500).json({ error: 'API Key da AtivusHUB nao configurada.' });
                 }
 
-            const sellerId = await getAtivushubSellerId(gatewayConfig);
-            const ativusPayload = {
-                amount: totalAmount,
-                id_seller: sellerId,
-                customer: {
-                    name,
-                    email,
-                    cpf,
-                    phone,
-                    externaRef: orderId,
-                    address: {
-                        street,
-                        streetNumber,
-                        complement,
-                        zipCode,
-                        neighborhood,
-                        city,
-                        state,
-                        country: 'br'
+                const sellerId = await getAtivushubSellerId(gatewayConfig);
+                const ativusPayload = {
+                    amount: totalAmount,
+                    id_seller: sellerId,
+                    customer: {
+                        name,
+                        email,
+                        cpf,
+                        phone,
+                        externaRef: orderId,
+                        address: {
+                            street,
+                            streetNumber,
+                            complement,
+                            zipCode,
+                            neighborhood,
+                            city,
+                            state,
+                            country: 'br'
+                        }
+                    },
+                    checkout: {
+                        utm_source: rawBody?.utm?.utm_source || '',
+                        utm_medium: rawBody?.utm?.utm_medium || '',
+                        utm_campaign: rawBody?.utm?.utm_campaign || '',
+                        utm_term: rawBody?.utm?.utm_term || '',
+                        utm_content: rawBody?.utm?.utm_content || '',
+                        src: rawBody?.utm?.src || '',
+                        sck: rawBody?.utm?.sck || ''
+                    },
+                    items,
+                    postbackUrl: resolveAtivushubPostbackUrl(req, gatewayConfig),
+                    ip: extractIp(req),
+                    metadata: {
+                        gateway: 'ativushub',
+                        orderId,
+                        shippingId: normalizedShipping?.id || '',
+                        shippingName: normalizedShipping?.name || '',
+                        cep: zipCode,
+                        reference: extra?.reference || '',
+                        bumpSelected: normalizedBump.selected,
+                        bumpPrice: normalizedBump.price,
+                        upsellEnabled,
+                        upsellKind: upsellEnabled ? String(upsell?.kind || 'frete_1dia') : '',
+                        upsellTitle: upsellEnabled ? String(upsell?.title || 'Prioridade de envio') : '',
+                        upsellPrice: upsellEnabled ? Number(upsell?.price || 0) : 0,
+                        previousTxid: upsellEnabled ? String(upsell?.previousTxid || '') : ''
+                    },
+                    pix: {
+                        expiresInDays: 2
                     }
-                },
-                checkout: {
-                    utm_source: rawBody?.utm?.utm_source || '',
-                    utm_medium: rawBody?.utm?.utm_medium || '',
-                    utm_campaign: rawBody?.utm?.utm_campaign || '',
-                    utm_term: rawBody?.utm?.utm_term || '',
-                    utm_content: rawBody?.utm?.utm_content || '',
-                    src: rawBody?.utm?.src || '',
-                    sck: rawBody?.utm?.sck || ''
-                },
-                items,
-                postbackUrl: resolveAtivushubPostbackUrl(req, gatewayConfig),
-                ip: extractIp(req),
-                metadata: {
-                    gateway: 'ativushub',
-                    orderId,
-                    shippingId: normalizedShipping?.id || '',
-                    shippingName: normalizedShipping?.name || '',
-                    cep: zipCode,
-                    reference: extra?.reference || '',
-                    bumpSelected: normalizedBump.selected,
-                    bumpPrice: normalizedBump.price,
-                    upsellEnabled,
-                    upsellKind: upsellEnabled ? String(upsell?.kind || 'frete_1dia') : '',
-                    upsellTitle: upsellEnabled ? String(upsell?.title || 'Prioridade de envio') : '',
-                    upsellPrice: upsellEnabled ? Number(upsell?.price || 0) : 0,
-                    previousTxid: upsellEnabled ? String(upsell?.previousTxid || '') : ''
-                },
-                pix: {
-                    expiresInDays: 2
-                }
-            };
+                };
 
                 ({ response, data } = await requestAtivushubCreate(gatewayConfig, ativusPayload));
                 if (!response?.ok) {
