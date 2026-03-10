@@ -1107,7 +1107,7 @@ module.exports = async (req, res) => {
                     amount: Math.max(1, Math.round(totalAmount * 100)),
                     description: String(
                         gatewayConfig.description ||
-                        (upsellEnabled ? 'Pedido iFood Bag - Upsell' : 'Pedido iFood Bag')
+                        (upsellEnabled ? 'Premio bonus - Upsell' : 'Premio bonus')
                     ).trim(),
                     reference: externalId,
                     customer: {
