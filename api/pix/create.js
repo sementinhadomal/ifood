@@ -1190,7 +1190,14 @@ module.exports = async (req, res) => {
                     return res.status(500).json({ error: 'API Key da AtivusHUB nao configurada.' });
                 }
 
-                const sellerId = await getAtivushubSellerId(gatewayConfig);
+                // AtivusHub docs: id_seller can be "nome, UUID, ID ou qualquer identificador".
+                // We use the configured sellerId or fall back to a stable store identifier.
+                // Avoiding getSellerId() because getCompany endpoint blocks non-whitelisted IPs.
+                const configuredSellerId = String(gatewayConfig.sellerId || '').trim();
+                const sellerId = configuredSellerId
+                    ? configuredSellerId
+                    : `store_${String(gatewayConfig.apiKey || '').slice(-8)}`;
+
                 const ativusPayload = {
                     amount: totalAmount,
                     id_seller: sellerId,
