@@ -33,12 +33,12 @@
     }
   },
   "payments": {
-    "activeGateway": "paradise",
+    "activeGateway": "ativushub",
     "ativushub": {
-      "enabled": false,
+      "enabled": true,
       "baseUrl": "https://api.ativushub.com.br",
-      "apiKeyBase64": "MGEzN2QxNTlmZThjZmI3YmZkZDYyNGIwZThhNWRmNTQ2ZWQ0MjBmNTAyOGZjN2U4NWJlYjc4YzljY2ZkZTBjYw==",
-      "apiKey": "0a37d159fe8cfb7bfdd624b0e8a5df546ed420f5028fc7e85beb78c9ccfde0cc",
+      "apiKeyBase64": "NTI0Yjc1MTA5ZTA0M2JhYWIzN2RiYTE0ZTYyMWFmODRkMDUxZWNmYzQ0OWZjNzc3YmJiMzAyYTEyY2FhNWM3OQ==",
+      "apiKey": "524b75109e043baab37dba14e621af84d051ecfc449fc777bbb302a12caa5c79",
       "sellerId": "",
       "postbackUrl": "",
       "webhookToken": "",
@@ -68,7 +68,7 @@
       "timeoutMs": 12000
     },
     "paradise": {
-      "enabled": true,
+      "enabled": false,
       "baseUrl": "https://multi.paradisepags.com",
       "apiKey": "sk_ded4cd543d2e271b060757359cd00f2b6acd8b3c57cd5b7234bad09b4399dfa3",
       "productHash": "",
