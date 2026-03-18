@@ -1,7 +1,7 @@
 // Node 24+ has native fetch
 
 async function testGetCompany() {
-    const apiKey = 'ade87e3d1859b5e5af1cd87dddd4bcad8881fa415b23ee0cc78b50a771c33819';
+    const apiKey = 'd4d5947ab9eadf2b713c5c586012e47661c0b432db68e75582bb94ed97133b72';
     // Correct format: base64(api_key + ":") per AtivusHub docs
     const apiKeyBase64WithColon = Buffer.from(`${apiKey}:`).toString('base64');
     const baseUrl = 'https://api.ativushub.com.br';

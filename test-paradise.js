@@ -30,8 +30,7 @@ async function verifyParadise() {
                 neighborhood: 'Centro',
                 city: 'Sao Paulo',
                 state: 'SP'
-            },
-            gateway: 'paradise'
+            }
         })
     });
 

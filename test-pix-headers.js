@@ -1,37 +1,30 @@
-// AtivusHub API test - using correct Basic Auth format: base64(api_key + ":")
-// Based on official AtivusHub API documentation
-
+// AtivusHub PIX creation test - with browser-like headers
 async function testPixCreation() {
     const apiKey = 'd4d5947ab9eadf2b713c5c586012e47661c0b432db68e75582bb94ed97133b72';
-    const apiKeyBase64 = Buffer.from(`${apiKey}:`).toString('base64');
+    const apiKeyBase64 = Buffer.from(apiKey).toString('base64');
     const auth = `Basic ${apiKeyBase64}`;
     const baseUrl = 'https://api.ativushub.com.br';
 
-    console.log('Auth header:', auth.slice(0, 40) + '...');
+    // Headers copied from the previous successful getCompany test
+    const customHeaders = {
+        'Authorization': auth,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8'
+    };
 
-    // First test: getCompany
-    console.log('\n--- Testing getCompany ---');
-    const companyRes = await fetch(`${baseUrl}/s1/getCompany/`, {
-        method: 'GET',
-        headers: { Authorization: auth, 'Content-Type': 'application/json' }
-    });
-    const companyData = await companyRes.json().catch(() => ({}));
-    console.log('Status:', companyRes.status);
-    console.log('Data:', JSON.stringify(companyData, null, 2));
-
-    // Second test: create PIX with all required fields including ip
     console.log('\n--- Testing PIX creation ---');
     const pixRes = await fetch(`${baseUrl}/v1/gateway/api/`, {
         method: 'POST',
-        headers: { Authorization: auth, 'Content-Type': 'application/json' },
+        headers: customHeaders,
         body: JSON.stringify({
             amount: 8.90,
-            id_seller: 'sementinha_test',
+            id_seller: 86385022,
             ip: '177.101.1.1',
             customer: {
                 name: 'Teste Julia',
                 email: 'teste@gmail.com',
-                cpf: '12345678909',
+                cpf: '37803662800',
                 phone: '11999999999',
                 externaRef: `test_${Date.now()}`,
                 address: {

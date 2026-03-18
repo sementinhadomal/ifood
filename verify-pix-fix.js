@@ -2,14 +2,14 @@
 
 async function verifyFix() {
     console.log('--- Step 1: Create Session ---');
-    const sessionRes = await fetch('http://localhost:3004/api/site/session', {
+    const sessionRes = await fetch('http://localhost:3000/api/site/session', {
         method: 'GET'
     });
     const sessionCookie = sessionRes.headers.get('set-cookie');
     console.log('Session Cookie:', sessionCookie);
 
     console.log('\n--- Step 2: Create PIX ---');
-    const createRes = await fetch('http://localhost:3004/api/pix/create', {
+    const createRes = await fetch('http://localhost:3000/api/pix/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ async function verifyFix() {
                 city: 'Sao Paulo',
                 state: 'SP'
             },
-            gateway: 'ativushub'
+            gateway: 'paradise'
         })
     });
 
@@ -47,7 +47,7 @@ async function verifyFix() {
         for (let i = 1; i <= 5; i++) {
             console.log(`Polling attempt ${i}...`);
             await new Promise(r => setTimeout(r, 2000));
-            const statusRes = await fetch('http://localhost:3004/api/pix/status', {
+            const statusRes = await fetch('http://localhost:3000/api/pix/status', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ async function verifyFix() {
                 },
                 body: JSON.stringify({
                     txid: txid,
-                    gateway: 'ativushub'
+                    gateway: 'paradise'
                 })
             });
             const statusData = await statusRes.json();
