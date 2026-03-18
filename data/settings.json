@@ -37,8 +37,8 @@
     "ativushub": {
       "enabled": true,
       "baseUrl": "https://api.ativushub.com.br",
-      "apiKeyBase64": "YWRlODdlM2QxODU5YjVlNWFmMWNkODdkZGRkNGJjYWQ4ODgxZmE0MTViMjNlZTBjYzc4YjUwYTc3MWMzMzgxOTo=",
-      "apiKey": "ade87e3d1859b5e5af1cd87dddd4bcad8881fa415b23ee0cc78b50a771c33819",
+      "apiKeyBase64": "",
+      "apiKey": "d4d5947ab9eadf2b713c5c586012e47661c0b432db68e75582bb94ed97133b72",
       "sellerId": "",
       "postbackUrl": "",
       "webhookToken": "",
