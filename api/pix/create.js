@@ -532,6 +532,9 @@ function beginPixCreateInflight(key) {
         reject: rejectPromise,
         expiresAt: Date.now() + PIX_CREATE_INFLIGHT_TTL_MS
     };
+    // Ensure the promise has a catch handler to prevent unhandled rejection crashes
+    // if finishPixCreateInflight rejects before anyone else awaits it.
+    promise.catch(() => {});
     PIX_CREATE_INFLIGHT.set(key, entry);
     return entry;
 }
@@ -1206,7 +1209,7 @@ module.exports = async (req, res) => {
                         email,
                         cpf,
                         phone,
-                        externaRef: orderId,
+                        externaRef: `${orderId}_${Date.now()}`,
                         address: {
                             street,
                             streetNumber,
